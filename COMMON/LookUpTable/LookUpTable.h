@@ -11,8 +11,12 @@ extern "C"{
 #ifndef _LookUpTable_H_
 #define _LookUpTable_H_
 
-//#define POLLING_LOOKUPTABLE         1           //顺序查表
-#define DICHOTOMY_LOOKUPTABLE       1           //二分法查表
+typedef enum 
+{
+    LookUpTable_PollingMode = 0,                /* 顺序查表 */
+    LookUpTable_DichotomyMode,                  /* 二分法查表 */
+    LookUpTable_InvalidMode,                    /* 无效 */
+}LookUpTable_Mode;
 
 typedef struct LookUpTable_Info
 {
@@ -24,7 +28,8 @@ typedef struct LookUpTable_Info
     pstLookUpTableInfo : 表数据, 顺序表(Input顺序小->大)
     TableLength : 表长度
 */
-float LookUpTable_Output(float Input, const LookUpTable_Info * pstLookUpTableInfo, const int TableLength);
+int LookUpTable_Output(LookUpTable_Mode enLookUpTableMode, float Input, float * pOutput, 
+                                const LookUpTable_Info * pstLookUpTableInfo, const int TableLength);
 
 #endif
 
