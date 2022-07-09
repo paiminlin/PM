@@ -1,0 +1,60 @@
+# Project: PM
+# Makefile created by Embarcadero Dev-C++ 6.3
+
+# This Makefile is written for syntax check!
+# Regenerate it if you want to use this Makefile to build.
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = COMMON/Alarm/Alarm.o COMMON/Control/Control.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o OS/OS.o main.o HAL/Hall_Motor/Hall_Motor.o COMMON/Cjson/cJSON.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/dictionary.o COMMON/Ini/iniparser.o
+LINKOBJ  = COMMON/Alarm/Alarm.o COMMON/Control/Control.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o OS/OS.o main.o HAL/Hall_Motor/Hall_Motor.o COMMON/Cjson/cJSON.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/dictionary.o COMMON/Ini/iniparser.o
+LIBS     = -L"E:/Dev-Cpp/TDM-GCC-64/lib" -L"E:/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib" -static-libgcc -pg
+INCS     = -I"E:/Dev-Cpp/TDM-GCC-64/include" -I"E:/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"E:/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
+CXXINCS  = -I"E:/Dev-Cpp/TDM-GCC-64/include" -I"E:/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"E:/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"E:/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
+BIN      = PM.exe
+CXXFLAGS = $(CXXINCS) -fsyntax-only -Wall -Wextra -Wfatal-errors -pg
+CFLAGS   = $(INCS) -fsyntax-only -Wall -Wextra -Wfatal-errors -pg
+DEL      = E:\Dev-Cpp\DevCpp.exe INTERNAL_DEL
+
+.PHONY: all all-before all-after clean clean-custom $(OBJ) $(BIN)
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${DEL} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+
+COMMON/Alarm/Alarm.o: COMMON/Alarm/Alarm.c
+	$(CC) -c COMMON/Alarm/Alarm.c $(CFLAGS)
+
+COMMON/Control/Control.o: COMMON/Control/Control.c
+	$(CC) -c COMMON/Control/Control.c $(CFLAGS)
+
+COMMON/Crc/crcLib.o: COMMON/Crc/crcLib.c
+	$(CC) -c COMMON/Crc/crcLib.c $(CFLAGS)
+
+COMMON/LookUpTable/LookUpTable.o: COMMON/LookUpTable/LookUpTable.c
+	$(CC) -c COMMON/LookUpTable/LookUpTable.c $(CFLAGS)
+
+OS/OS.o: OS/OS.c
+	$(CC) -c OS/OS.c $(CFLAGS)
+
+main.o: main.c
+	$(CC) -c main.c $(CFLAGS)
+
+HAL/Hall_Motor/Hall_Motor.o: HAL/Hall_Motor/Hall_Motor.c
+	$(CC) -c HAL/Hall_Motor/Hall_Motor.c $(CFLAGS)
+
+COMMON/Cjson/cJSON.o: COMMON/Cjson/cJSON.c
+	$(CC) -c COMMON/Cjson/cJSON.c $(CFLAGS)
+
+COMMON/Cjson/cJSON_Utils.o: COMMON/Cjson/cJSON_Utils.c
+	$(CC) -c COMMON/Cjson/cJSON_Utils.c $(CFLAGS)
+
+COMMON/Ini/dictionary.o: COMMON/Ini/dictionary.c
+	$(CC) -c COMMON/Ini/dictionary.c $(CFLAGS)
+
+COMMON/Ini/iniparser.o: COMMON/Ini/iniparser.c
+	$(CC) -c COMMON/Ini/iniparser.c $(CFLAGS)
