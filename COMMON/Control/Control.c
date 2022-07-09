@@ -104,7 +104,6 @@ int Control_Run(void)
                 && s_stUpdateControlFlashInfo[TaskNum].StopTimes == 0
                 &&s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes == 0)
             {
-                s_stUpdateControlFlashInfo[TaskNum].RepeatTimes --;
                 s_stUpdateControlFlashInfo[TaskNum].StartTimes = s_stControlFlashInfo[TaskNum].StartTimes;
                 s_stUpdateControlFlashInfo[TaskNum].StopTimes = s_stControlFlashInfo[TaskNum].StopTimes;
                 s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes = s_stControlFlashInfo[TaskNum].IntermittentTimes;
@@ -256,7 +255,7 @@ int Control_DestroyTaskInfo(int TaskNum, ControTask_Info * pstControlTaskInfo)
     return -1;
 }
 
-#define Control_MAIN_DEBUG
+//#define Control_MAIN_DEBUG
 #ifdef Control_MAIN_DEBUG
 
 int Start(void)
@@ -287,7 +286,7 @@ int main()
     stControlFlashInfo.StartTimes = 3;
     stControlFlashInfo.StopTimes = 3;
     stControlFlashInfo.IntermittentTimes = 3;
-    Control_SetMode(TaskNum, Control_UnlimitedFlashMode, stControlFlashInfo);
+    Control_SetMode(TaskNum, Control_LimitedFlashMode, stControlFlashInfo);
 
     while(1)
     {
