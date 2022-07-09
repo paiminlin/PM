@@ -1,20 +1,27 @@
 /*
 demo_crc.c
-crc demo : CRC 校验
+crc demo : CRC 鏍￠獙
 
-引用 crcLib.h crcLib.c
-github 地址 : https://github.com/whik/crc-lib-c
+寮曠敤 crcLib.h crcLib.c
+github 鍦板潃 : https://github.com/whik/crc-lib-c
 
 */
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include <string.h>
+#include <stdbool.h>
 
 #include "crcLib.h"
 
-int main(int argc, char *argv[]) {
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+//#define DemoCrc_MAIN_DEBUG
+#ifdef DemoCrc_MAIN_DEBUG
+
+int main() {
 
     char str[16] = "Hello World!";
 
@@ -42,3 +49,9 @@ int main(int argc, char *argv[]) {
 
     return 0;
 }
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+
