@@ -36,11 +36,11 @@ typedef enum
     OSTask_Timer_Invalid        = 3,
 }OSTask_Timer;
 
-typedef void (*OSTaskInit_Fun)(void);
+typedef int (*OSTaskInit_Fun)(void);
 
-typedef void (*OSTaskDeInit_Fun)(void);
+typedef int (*OSTaskDeInit_Fun)(void);
 
-typedef void (*OSTaskRun_Fun)(void);
+typedef int (*OSTaskRun_Fun)(void);
 
 typedef struct OSTask_Info
 {
@@ -52,25 +52,27 @@ typedef struct OSTask_Info
     OSTaskRun_Fun OSTaskRunFun;             /* Task任务回调 暂不支持While(1)逻辑 */
 } OSTask_Info;
 
-int OS_Run();
+int OS_Run(void);
 
-int OS_Reset();
+int OS_Reset(void);
 
 int OS_WakeUp(OSTask_WakeUp enOSTaskWakeUp, OSTask_Grab enOSTaskGrab);
 
-int OS_Sleep();
+int OS_Sleep(void);
 
-int OS_Start();
+int OS_Start(void);
 
-int OS_Stop();
+int OS_Stop(void);
 
-int OS_Init();
+bool OS_GetStatus(void);
 
-int OS_DeInit();
+int OS_Init(void);
+
+int OS_DeInit(void);
 
 int OS_CreatTask(OSTask_Info * pstOSTaskInfo);
 
-int OS_DestroyTask(OSTask_Info * pstOSTaskInfo);
+int OS_DestroyTask(int TaskNum, OSTask_Info * pstOSTaskInfo);
 
 int OS_StartTask(int TaskNum);
 
