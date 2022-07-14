@@ -1,3 +1,9 @@
+/*
+    From : https://github.com/paiminlin/PM
+    From : https://blog.csdn.net/lpaim/article/details/122160263
+    Author : PaiMin.lin
+    Date : 2022.7.14
+*/
 
 #include "OS.h"
 
@@ -5,37 +11,43 @@
 extern "C"{
 #endif
 
+typedef struct OS_Info
+{
+    bool bOSInit;
+    bool bOSStart;
+    OSTask_WakeUp enOSTaskWakeUp;
+    OSTask_Grab enOSTaskGrab;
+    bool bOSTaskCreat[OSTask_MAXNUM];
+    bool bOSTaskStart[OSTask_MAXNUM];
+} OS_Info;
+
 static int s_10MsConunt = 0;
 static int s_100MsConunt = 1;       /* +1 100Ms周期首次左偏移 规避10Ms和100Ms调度并发执行*/
 
-static bool s_bOSStart = false;
-static OSTask_WakeUp s_enOSTaskWakeUp = OSTask_WakeUp_Invalid;
-static OSTask_WakeUp s_enOSTaskGrab = OSTask_Grab_Invalid;
-
-static bool s_bOSTaskStart[OSTask_MAXNUM] = {0};
+static OS_Info s_stOSInfo = {0};
 static OSTask_Info s_stOSTaskInfo[OSTask_MAXNUM] = {0};
 
 int OS_Run(void)
 {
-    if(s_bOSStart == false || s_enOSTaskWakeUp == OSTask_WakeUp_Invalid)
+    if(s_stOSInfo.bOSInit == false || s_stOSInfo.bOSStart == false || s_stOSInfo.enOSTaskWakeUp == OSTask_WakeUp_Invalid)
         return 0;
 
     int TaskNum = 0;
 
-    if(s_enOSTaskWakeUp == OSTask_WakeUp_Grab)
+    if(s_stOSInfo.enOSTaskWakeUp == OSTask_WakeUp_Grab)
     {
         for(TaskNum = 0; TaskNum < OSTask_MAXNUM; TaskNum ++)
         {
-            if(s_bOSTaskStart[TaskNum] == true
+            if(s_stOSInfo.bOSTaskStart[TaskNum] == true
                 && s_stOSTaskInfo[TaskNum].enOSTaskWakeUp == OSTask_WakeUp_Grab
                 && s_stOSTaskInfo[TaskNum].OSTaskRunFun != NULL)
                     s_stOSTaskInfo[TaskNum].OSTaskRunFun();
 
-            if(s_bOSStart == false || s_enOSTaskWakeUp == OSTask_WakeUp_Invalid)
+            if(s_stOSInfo.bOSInit == false || s_stOSInfo.bOSStart == false || s_stOSInfo.enOSTaskWakeUp == OSTask_WakeUp_Invalid)
                 break;
         }
     }
-    else if(s_enOSTaskWakeUp == OSTask_WakeUp_1MSTimer)
+    else if(s_stOSInfo.enOSTaskWakeUp == OSTask_WakeUp_1MSTimer)
     {
         s_10MsConunt ++;
         s_100MsConunt ++;
@@ -47,14 +59,14 @@ int OS_Run(void)
 
         for(TaskNum = 0; TaskNum < OSTask_MAXNUM; TaskNum ++)
         {
-            if(s_bOSTaskStart[TaskNum] == true)
+            if(s_stOSInfo.bOSTaskStart[TaskNum] == true)
             {
                  if(s_stOSTaskInfo[TaskNum].enOSTaskWakeUp == OSTask_WakeUp_1MSTimer
                     && s_stOSTaskInfo[TaskNum].enOSTaskTimer == OSTask_Timer_1MS
                     && s_stOSTaskInfo[TaskNum].OSTaskRunFun != NULL)
                         s_stOSTaskInfo[TaskNum].OSTaskRunFun();
 
-                if(s_bOSStart == false || s_enOSTaskWakeUp == OSTask_WakeUp_Invalid)
+                if(s_stOSInfo.bOSInit == false || s_stOSInfo.bOSStart == false || s_stOSInfo.enOSTaskWakeUp == OSTask_WakeUp_Invalid)
                     break;
 
                 if(b10MS && s_stOSTaskInfo[TaskNum].enOSTaskWakeUp == OSTask_WakeUp_1MSTimer
@@ -62,7 +74,7 @@ int OS_Run(void)
                     && s_stOSTaskInfo[TaskNum].OSTaskRunFun != NULL)
                         s_stOSTaskInfo[TaskNum].OSTaskRunFun();
 
-                if(s_bOSStart == false || s_enOSTaskWakeUp == OSTask_WakeUp_Invalid)
+                if(s_stOSInfo.bOSInit == false || s_stOSInfo.bOSStart == false || s_stOSInfo.enOSTaskWakeUp == OSTask_WakeUp_Invalid)
                     break;
 
                 if(b100MS && s_stOSTaskInfo[TaskNum].enOSTaskWakeUp == OSTask_WakeUp_1MSTimer
@@ -70,7 +82,7 @@ int OS_Run(void)
                     && s_stOSTaskInfo[TaskNum].OSTaskRunFun != NULL)
                         s_stOSTaskInfo[TaskNum].OSTaskRunFun();
 
-                if(s_bOSStart == false || s_enOSTaskWakeUp == OSTask_WakeUp_Invalid)
+                if(s_stOSInfo.bOSInit == false || s_stOSInfo.bOSStart == false || s_stOSInfo.enOSTaskWakeUp == OSTask_WakeUp_Invalid)
                     break;
             }
         }
@@ -114,54 +126,71 @@ int OS_Reset(void)
 
 int OS_WakeUp(OSTask_WakeUp enOSTaskWakeUp, OSTask_Grab enOSTaskGrab)
 {
-    s_enOSTaskWakeUp = enOSTaskWakeUp;
-    s_enOSTaskGrab = enOSTaskGrab;
+    s_stOSInfo.enOSTaskWakeUp = enOSTaskWakeUp;
+    s_stOSInfo.enOSTaskGrab = enOSTaskGrab;
 
     return 0;
 }
 
 int OS_Sleep(void)
 {
-    s_enOSTaskWakeUp = OSTask_WakeUp_Invalid;
-    s_enOSTaskGrab = OSTask_Grab_Invalid;
+    s_stOSInfo.enOSTaskWakeUp = OSTask_WakeUp_Invalid;
+    s_stOSInfo.enOSTaskGrab = OSTask_Grab_Invalid;
 
     return 0;
 }
 
 int OS_Start(void)
 {
-    s_bOSStart = true;
+    if(s_stOSInfo.bOSInit == false)
+        return -1;
+
+    if(s_stOSInfo.bOSStart == true)
+        return 0;
+
+    s_stOSInfo.bOSStart = true;
 
     return 0;
 }
 
 int OS_Stop(void)
 {
-    s_bOSStart = false;
-    s_enOSTaskWakeUp = OSTask_WakeUp_Invalid;
-    s_enOSTaskGrab = OSTask_Grab_Invalid;
+    if(s_stOSInfo.bOSInit == false)
+        return -1;
+
+    if(s_stOSInfo.bOSStart == false)
+        return 0;
+
+    s_stOSInfo.bOSStart = false;
+    s_stOSInfo.enOSTaskWakeUp = OSTask_WakeUp_Invalid;
+    s_stOSInfo.enOSTaskGrab = OSTask_Grab_Invalid;
 
     return 0;
 }
 
 bool OS_GetStatus(void)
 {
-    return s_bOSStart;
+    return s_stOSInfo.bOSStart;
 }
 
 int OS_Init(void)
 {
+    if(s_stOSInfo.bOSInit == true)
+        return 0;
+
     int TaskNum = 0;
 
     s_10MsConunt = 0;
     s_100MsConunt = 1;
-    s_bOSStart = false;
-    s_enOSTaskWakeUp = OSTask_WakeUp_Invalid;
-    s_enOSTaskGrab = OSTask_Grab_Invalid;
+    s_stOSInfo.bOSInit = true;
+    s_stOSInfo.bOSStart = false;
+    s_stOSInfo.enOSTaskWakeUp = OSTask_WakeUp_Invalid;
+    s_stOSInfo.enOSTaskGrab = OSTask_Grab_Invalid;
 
     for(TaskNum = 0; TaskNum < OSTask_MAXNUM; TaskNum ++)
     {
-        s_bOSTaskStart[TaskNum] = false;
+        s_stOSInfo.bOSTaskCreat[TaskNum] = false;
+        s_stOSInfo.bOSTaskStart[TaskNum] = false;
 
         s_stOSTaskInfo[TaskNum].enOSTaskWakeUp = OSTask_WakeUp_Invalid;
         s_stOSTaskInfo[TaskNum].enOSTaskTimer = OSTask_Timer_Invalid;
@@ -176,18 +205,23 @@ int OS_DeInit(void)
 {
     int TaskNum = 0;
 
-    if(s_bOSStart == true)
+    if(s_stOSInfo.bOSInit == false)
+        return 0;
+
+    if(s_stOSInfo.bOSStart == true)
         return -1;
 
     s_10MsConunt = 0;
     s_100MsConunt = 1;
-    s_bOSStart = false;
-    s_enOSTaskWakeUp = OSTask_WakeUp_Invalid;
-    s_enOSTaskGrab = OSTask_Grab_Invalid;
+    s_stOSInfo.bOSInit = false;
+    s_stOSInfo.bOSStart = false;
+    s_stOSInfo.enOSTaskWakeUp = OSTask_WakeUp_Invalid;
+    s_stOSInfo.enOSTaskGrab = OSTask_Grab_Invalid;
 
     for(TaskNum = 0; TaskNum < OSTask_MAXNUM; TaskNum ++)
     {
-        s_bOSTaskStart[TaskNum] = false;
+        s_stOSInfo.bOSTaskCreat[TaskNum] = false;
+        s_stOSInfo.bOSTaskStart[TaskNum] = false;
 
         s_stOSTaskInfo[TaskNum].enOSTaskWakeUp = OSTask_WakeUp_Invalid;
         s_stOSTaskInfo[TaskNum].enOSTaskTimer = OSTask_Timer_Invalid;
@@ -201,6 +235,9 @@ int OS_DeInit(void)
 
 int OS_CreatTask(OSTask_Info * pstOSTaskInfo)
 {
+    if(s_stOSInfo.bOSInit == false || s_stOSInfo.bOSStart == false)
+        return -1;
+
     int TaskNum = 0;
 
     if(pstOSTaskInfo == NULL)
@@ -212,7 +249,8 @@ int OS_CreatTask(OSTask_Info * pstOSTaskInfo)
             && s_stOSTaskInfo[TaskNum].OSTaskDeInitFun == NULL
             && s_stOSTaskInfo[TaskNum].OSTaskRunFun == NULL)
         {
-            s_bOSTaskStart[TaskNum] = false;
+            s_stOSInfo.bOSTaskCreat[TaskNum] = true;
+            s_stOSInfo.bOSTaskStart[TaskNum] = false;
 
             s_stOSTaskInfo[TaskNum].enOSTaskWakeUp = pstOSTaskInfo->enOSTaskWakeUp;
             s_stOSTaskInfo[TaskNum].enOSTaskTimer = pstOSTaskInfo->enOSTaskTimer;
@@ -227,6 +265,9 @@ int OS_CreatTask(OSTask_Info * pstOSTaskInfo)
 
 int OS_DestroyTask(int TaskNum, OSTask_Info * pstOSTaskInfo)
 {
+    if(s_stOSInfo.bOSInit == false || s_stOSInfo.bOSStart == false)
+        return -1;
+
     if(TaskNum < 0 || TaskNum >= OSTask_MAXNUM 
         || pstOSTaskInfo == NULL)
         return -1;
@@ -237,7 +278,8 @@ int OS_DestroyTask(int TaskNum, OSTask_Info * pstOSTaskInfo)
         && s_stOSTaskInfo[TaskNum].OSTaskDeInitFun == pstOSTaskInfo->OSTaskDeInitFun
         && s_stOSTaskInfo[TaskNum].OSTaskRunFun == pstOSTaskInfo->OSTaskRunFun)
     {
-        s_bOSTaskStart[TaskNum] = false;
+        s_stOSInfo.bOSTaskCreat[TaskNum] = false;
+        s_stOSInfo.bOSTaskStart[TaskNum] = false;
 
         s_stOSTaskInfo[TaskNum].enOSTaskWakeUp = OSTask_WakeUp_Invalid;
         s_stOSTaskInfo[TaskNum].enOSTaskTimer = OSTask_Timer_Invalid;
@@ -254,7 +296,13 @@ int OS_StartTask(int TaskNum)
     if(TaskNum < 0 || TaskNum >= OSTask_MAXNUM)
         return -1;
 
-    s_bOSTaskStart[TaskNum] = true;
+    if(s_stOSInfo.bOSTaskCreat[TaskNum] == false)
+        return -1;
+
+    if(s_stOSInfo.bOSTaskStart[TaskNum] == true)
+        return 0;
+
+    s_stOSInfo.bOSTaskStart[TaskNum] = true;
     if(s_stOSTaskInfo[TaskNum].OSTaskInitFun != NULL)
         s_stOSTaskInfo[TaskNum].OSTaskInitFun();
 
@@ -266,7 +314,13 @@ int OS_StopTask(int TaskNum)
     if(TaskNum < 0 || TaskNum >= OSTask_MAXNUM)
         return -1;
 
-    s_bOSTaskStart[TaskNum] = false;
+    if(s_stOSInfo.bOSTaskCreat[TaskNum] == false)
+        return -1;
+
+    if(s_stOSInfo.bOSTaskStart[TaskNum] == false)
+        return 0;
+
+    s_stOSInfo.bOSTaskStart[TaskNum] = false;
     if(s_stOSTaskInfo[TaskNum].OSTaskDeInitFun != NULL)
         s_stOSTaskInfo[TaskNum].OSTaskDeInitFun();
 
@@ -349,6 +403,8 @@ int main()
 
     OS_Init();
 
+    OS_Start();
+
     OSTask_Info stOSTaskInfo[4] =
     {
         /*enOSTaskWakeUp          enOSTaskGrab         enOSTaskTimer         OSTaskInitFun        OSTaskDeInitFun        OSTaskRunFun*/
@@ -364,8 +420,6 @@ int main()
 
     for(TaskNum = 0; TaskNum < TableLength; TaskNum ++)
         OS_StartTask(TaskNum);
-
-    OS_Start();
 
     time_t timestart,timeend;
     timestart = time(NULL);
@@ -392,13 +446,13 @@ int main()
         OS_Run();
     }
 
-    OS_Stop();
-
     for(TaskNum = 0; TaskNum < TableLength; TaskNum ++)
         OS_StopTask(TaskNum);
 
     for(TaskNum = 0; TaskNum < TableLength; TaskNum ++)
         OS_DestroyTask(TaskNum, &stOSTaskInfo[TaskNum]);
+
+    OS_Stop();
 
     OS_DeInit();
 
