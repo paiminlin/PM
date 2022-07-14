@@ -1,3 +1,9 @@
+/*
+    From : https://github.com/paiminlin/PM
+    From : https://blog.csdn.net/lpaim/article/details/122160744
+    Author : PaiMin.lin
+    Date : 2022.7.14
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,11 +19,11 @@ extern "C"{
 
 #define AlarmTask_MAXNUM                100     /* 支持最多管理的报警对象数量 */
 
-typedef struct Alarm_Info
+typedef struct Alarm_Interval
 {
     int Threshold;                              /* 阈值 */
     int duration;                               /* 维持时间 duration * Alarm_Run */
-} Alarm_Info;
+} Alarm_Interval;
 
 typedef int (*AlarmGetData_Fun)(void);
 
@@ -27,8 +33,8 @@ typedef int (*AlarmResume_Fun)(void);
 
 typedef struct AlarmTask_Info
 {
-    Alarm_Info AlarmSill;                       /* 报警阈值/维持时间 */
-    Alarm_Info AlarmResume;                     /* 回滞阈值/维持时间 */
+    Alarm_Interval AlarmSill;                   /* 报警阈值/维持时间 */
+    Alarm_Interval AlarmResume;                 /* 回滞阈值/维持时间 */
     AlarmGetData_Fun AlarmGetDataFun;           /* 获取报警对象 返回报警对象数据 */
     AlarmSill_Fun AlarmSillFun;                 /* 触发报警 */
     AlarmResume_Fun AlarmResumeFun;             /* 触发回滞 */
