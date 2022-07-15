@@ -2,7 +2,7 @@
     From : https://github.com/paiminlin/PM
     From : https://blog.csdn.net/lpaim/article/details/122160263
     Author : PaiMin.lin
-    Date : 2022.7.14
+    Date : 2022.7.15
 */
 
 #include "OS.h"
@@ -22,7 +22,7 @@ typedef struct OS_Info
 } OS_Info;
 
 static int s_10MsConunt = 0;
-static int s_100MsConunt = 1;       /* +1 100Ms周期首次左偏移 规避10Ms和100Ms调度并发执行*/
+static int s_100MsConunt = 0;
 
 static OS_Info s_stOSInfo = {0};
 static OSTask_Info s_stOSTaskInfo[OSTask_MAXNUM] = {0};
@@ -49,8 +49,6 @@ int OS_Run(void)
     }
     else if(s_stOSInfo.enOSTaskWakeUp == OSTask_WakeUp_1MSTimer)
     {
-        s_10MsConunt ++;
-        s_100MsConunt ++;
         /*
             定时器首次唤醒 不触发执行任务
         */
@@ -86,11 +84,6 @@ int OS_Run(void)
                     break;
             }
         }
-
-        if(s_10MsConunt == 10)
-            s_10MsConunt = 0;
-        if(s_100MsConunt == 100)
-            s_100MsConunt = 0;
     }
 
     OS_Sleep();
@@ -117,7 +110,7 @@ int OS_Reset(void)
     }
 
     s_10MsConunt = 0;
-    s_100MsConunt = 1;
+    s_100MsConunt = 0;
 
     OS_Start();
 
@@ -126,9 +119,24 @@ int OS_Reset(void)
 
 int OS_WakeUp(OSTask_WakeUp enOSTaskWakeUp, OSTask_Grab enOSTaskGrab)
 {
-    s_stOSInfo.enOSTaskWakeUp = enOSTaskWakeUp;
-    s_stOSInfo.enOSTaskGrab = enOSTaskGrab;
+    if(enOSTaskWakeUp == OSTask_WakeUp_1MSTimer)
+    {
+        s_stOSInfo.enOSTaskWakeUp = OSTask_WakeUp_1MSTimer;
+        if(s_10MsConunt == 10)
+            s_10MsConunt = 1;
+        else
+            s_10MsConunt ++;
 
+        if(s_100MsConunt == 100)
+            s_100MsConunt = 1;
+        else
+            s_100MsConunt ++;
+    }
+    else if(enOSTaskWakeUp == OSTask_WakeUp_Grab)
+    {
+        s_stOSInfo.enOSTaskWakeUp = OSTask_WakeUp_Grab;
+        s_stOSInfo.enOSTaskGrab = enOSTaskGrab;
+    }
     return 0;
 }
 
@@ -181,7 +189,7 @@ int OS_Init(void)
     int TaskNum = 0;
 
     s_10MsConunt = 0;
-    s_100MsConunt = 1;
+    s_100MsConunt = 0;
     s_stOSInfo.bOSInit = true;
     s_stOSInfo.bOSStart = false;
     s_stOSInfo.enOSTaskWakeUp = OSTask_WakeUp_Invalid;
@@ -212,7 +220,7 @@ int OS_DeInit(void)
         return -1;
 
     s_10MsConunt = 0;
-    s_100MsConunt = 1;
+    s_100MsConunt = 0;
     s_stOSInfo.bOSInit = false;
     s_stOSInfo.bOSStart = false;
     s_stOSInfo.enOSTaskWakeUp = OSTask_WakeUp_Invalid;
