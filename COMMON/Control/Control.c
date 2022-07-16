@@ -1,3 +1,9 @@
+/*
+    From : https://github.com/paiminlin/PM
+    From : https://blog.csdn.net/lpaim/article/details/125649860
+    Author : PaiMin.lin
+    Date : 2022.7.16
+*/
 
 #include "Control.h"
 
@@ -5,202 +11,212 @@
 extern "C"{
 #endif
 
+typedef struct Control_Info
+{
+    bool bControlInit;
+    bool bControlStart;
+    bool bControlTaskCreat[ControlTask_MAXNUM];
+    Control_Mode enControlTaskMode[ControlTask_MAXNUM];
+    ControlFlash_Info stControlTaskFlashInfo[ControlTask_MAXNUM];
+} Control_Info;
+
+static bool s_bUpdateControlTaskFlashFlage[ControlTask_MAXNUM] = {0};
+static ControlFlash_Info s_stUpdateControlTaskFlashInfo[ControlTask_MAXNUM] = {0};
+
+static Control_Info s_stControlInfo = {0};
 static ControTask_Info s_stControlTaskInfo[ControlTask_MAXNUM] = {0};
-static Control_Mode s_enControlMode[ControlTask_MAXNUM] = {0};
-static ControlFlash_Info s_stControlFlashInfo[ControlTask_MAXNUM] = {0};
-static bool s_bUpdateControlFlashFlage[ControlTask_MAXNUM] = {0};
-static ControlFlash_Info s_stUpdateControlFlashInfo[ControlTask_MAXNUM] = {0};
 
 int Control_Run(void)
 {
+    if(s_stControlInfo.bControlInit == false || s_stControlInfo.bControlStart == false)
+        return 0;
+
     int TaskNum = 0;
 
     for(TaskNum = 0; TaskNum < ControlTask_MAXNUM; TaskNum ++)
     {
-        if(s_enControlMode[TaskNum] == Control_StartMode)
+        if(s_stControlInfo.enControlTaskMode[TaskNum] == Control_StartMode)
         {
             if(s_stControlTaskInfo[TaskNum].ControlStartFun != NULL)
                 s_stControlTaskInfo[TaskNum].ControlStartFun();
         }
-        else if(s_enControlMode[TaskNum] == Control_StopMode)
+        else if(s_stControlInfo.enControlTaskMode[TaskNum] == Control_StopMode)
         {
             if(s_stControlTaskInfo[TaskNum].ControlStopFun != NULL)
                 s_stControlTaskInfo[TaskNum].ControlStopFun();
         }
-        else if(s_enControlMode[TaskNum] == Control_LimitedFlashMode)
+        else if(s_stControlInfo.enControlTaskMode[TaskNum] == Control_LimitedFlashMode)
         {
-            if(s_bUpdateControlFlashFlage[TaskNum] == true)
+            if(s_bUpdateControlTaskFlashFlage[TaskNum] == true)
             {
-                s_bUpdateControlFlashFlage[TaskNum] = false;
-                s_stUpdateControlFlashInfo[TaskNum].RepeatTimes = s_stControlFlashInfo[TaskNum].RepeatTimes;
-                s_stUpdateControlFlashInfo[TaskNum].StartTimes = s_stControlFlashInfo[TaskNum].StartTimes;
-                s_stUpdateControlFlashInfo[TaskNum].StopTimes = s_stControlFlashInfo[TaskNum].StopTimes;
-                s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes = s_stControlFlashInfo[TaskNum].IntermittentTimes;
+                s_bUpdateControlTaskFlashFlage[TaskNum] = false;
+                s_stUpdateControlTaskFlashInfo[TaskNum].RepeatTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].RepeatTimes;
+                s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].StartTimes;
+                s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].StopTimes;
+                s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].IntermittentTimes;
             }
 
-            if(s_stUpdateControlFlashInfo[TaskNum].RepeatTimes > 0)
+            if(s_stUpdateControlTaskFlashInfo[TaskNum].RepeatTimes > 0)
             {
-                if(s_stUpdateControlFlashInfo[TaskNum].StartTimes > 0)
+                if(s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes > 0)
                 {
                     if(s_stControlTaskInfo[TaskNum].ControlStartFun != NULL)
                         s_stControlTaskInfo[TaskNum].ControlStartFun();
-                    s_stUpdateControlFlashInfo[TaskNum].StartTimes --;
+                    s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes --;
                 }
-                else if(s_stUpdateControlFlashInfo[TaskNum].StopTimes > 0)
+                else if(s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes > 0)
                 {
                     if(s_stControlTaskInfo[TaskNum].ControlStopFun != NULL)
                         s_stControlTaskInfo[TaskNum].ControlStopFun();
-                    s_stUpdateControlFlashInfo[TaskNum].StopTimes --;
+                    s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes --;
                 }
-                else if(s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes > 0)
+                else if(s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes > 0)
                 {
-                    s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes --;
+                    s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes --;
                 }
 
-                if(s_stUpdateControlFlashInfo[TaskNum].StartTimes == 0
-                    && s_stUpdateControlFlashInfo[TaskNum].StopTimes == 0
-                    &&s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes == 0)
+                if(s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes == 0
+                    && s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes == 0
+                    &&s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes == 0)
                 {
-                    s_stUpdateControlFlashInfo[TaskNum].RepeatTimes --;
-                    s_stUpdateControlFlashInfo[TaskNum].StartTimes = s_stControlFlashInfo[TaskNum].StartTimes;
-                    s_stUpdateControlFlashInfo[TaskNum].StopTimes = s_stControlFlashInfo[TaskNum].StopTimes;
-                    s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes = s_stControlFlashInfo[TaskNum].IntermittentTimes;
+                    s_stUpdateControlTaskFlashInfo[TaskNum].RepeatTimes --;
+                    s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].StartTimes;
+                    s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].StopTimes;
+                    s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].IntermittentTimes;
                 }
             }
             else
             {
-                s_enControlMode[TaskNum] = Control_StopMode;
+                s_stControlInfo.enControlTaskMode[TaskNum] = Control_StopMode;
             }
         }
-        else if(s_enControlMode[TaskNum] == Control_UnlimitedFlashMode)
+        else if(s_stControlInfo.enControlTaskMode[TaskNum] == Control_UnlimitedFlashMode)
         {
-            if(s_bUpdateControlFlashFlage[TaskNum] == true)
+            if(s_bUpdateControlTaskFlashFlage[TaskNum] == true)
             {
-                s_bUpdateControlFlashFlage[TaskNum] = false;
-                s_stUpdateControlFlashInfo[TaskNum].RepeatTimes = s_stControlFlashInfo[TaskNum].RepeatTimes;
-                s_stUpdateControlFlashInfo[TaskNum].StartTimes = s_stControlFlashInfo[TaskNum].StartTimes;
-                s_stUpdateControlFlashInfo[TaskNum].StopTimes = s_stControlFlashInfo[TaskNum].StopTimes;
-                s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes = s_stControlFlashInfo[TaskNum].IntermittentTimes;
+                s_bUpdateControlTaskFlashFlage[TaskNum] = false;
+                s_stUpdateControlTaskFlashInfo[TaskNum].RepeatTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].RepeatTimes;
+                s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].StartTimes;
+                s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].StopTimes;
+                s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].IntermittentTimes;
             }
 
-            if(s_stUpdateControlFlashInfo[TaskNum].StartTimes > 0)
+            if(s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes > 0)
             {
                 if(s_stControlTaskInfo[TaskNum].ControlStartFun != NULL)
                     s_stControlTaskInfo[TaskNum].ControlStartFun();
-                s_stUpdateControlFlashInfo[TaskNum].StartTimes --;
+                s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes --;
             }
-            else if(s_stUpdateControlFlashInfo[TaskNum].StopTimes > 0)
+            else if(s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes > 0)
             {
                 if(s_stControlTaskInfo[TaskNum].ControlStopFun != NULL)
                     s_stControlTaskInfo[TaskNum].ControlStopFun();
-                s_stUpdateControlFlashInfo[TaskNum].StopTimes --;
+                s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes --;
             }
-            else if(s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes > 0)
+            else if(s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes > 0)
             {
-                s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes --;
+                s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes --;
             }
 
-            if(s_stUpdateControlFlashInfo[TaskNum].StartTimes == 0
-                && s_stUpdateControlFlashInfo[TaskNum].StopTimes == 0
-                &&s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes == 0)
+            if(s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes == 0
+                && s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes == 0
+                &&s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes == 0)
             {
-                s_stUpdateControlFlashInfo[TaskNum].StartTimes = s_stControlFlashInfo[TaskNum].StartTimes;
-                s_stUpdateControlFlashInfo[TaskNum].StopTimes = s_stControlFlashInfo[TaskNum].StopTimes;
-                s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes = s_stControlFlashInfo[TaskNum].IntermittentTimes;
+                s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].StartTimes;
+                s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].StopTimes;
+                s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].IntermittentTimes;
             }
         }
     }
     return 0;
 }
 
-int Control_SetMode(int TaskNum, Control_Mode enControlMode, 
-                                ControlFlash_Info stControlFlashInfo)
+int Control_Start(void)
 {
-    if(TaskNum < 0 || TaskNum >= ControlTask_MAXNUM)
+    if(s_stControlInfo.bControlInit == false)
         return -1;
 
-    s_enControlMode[TaskNum] = enControlMode;
-    s_bUpdateControlFlashFlage[TaskNum] = true;
-    s_stControlFlashInfo[TaskNum].RepeatTimes = stControlFlashInfo.RepeatTimes;
-    s_stControlFlashInfo[TaskNum].StartTimes = stControlFlashInfo.StartTimes;
-    s_stControlFlashInfo[TaskNum].StopTimes = stControlFlashInfo.StopTimes;
-    s_stControlFlashInfo[TaskNum].IntermittentTimes = stControlFlashInfo.IntermittentTimes;
+    s_stControlInfo.bControlStart = true;
 
     return 0;
 }
 
-int Control_GetMode(int TaskNum, Control_Mode *penControlMode, 
-                                ControlFlash_Info *pstControlFlashInfo)
+int Control_Stop(void)
 {
-    if(TaskNum < 0 || TaskNum >= ControlTask_MAXNUM
-        || penControlMode == NULL || pstControlFlashInfo == NULL)
+    if(s_stControlInfo.bControlInit == false)
         return -1;
 
-    *penControlMode = s_enControlMode[TaskNum];
-    if(*penControlMode == Control_LimitedFlashMode
-        || *penControlMode == Control_UnlimitedFlashMode)
-    {
-        pstControlFlashInfo->RepeatTimes = s_stControlFlashInfo[TaskNum].RepeatTimes;
-        pstControlFlashInfo->StartTimes = s_stControlFlashInfo[TaskNum].StartTimes;
-        pstControlFlashInfo->StopTimes = s_stControlFlashInfo[TaskNum].StopTimes;
-        pstControlFlashInfo->IntermittentTimes = s_stControlFlashInfo[TaskNum].IntermittentTimes;
-    }
-    else
-    {
-        pstControlFlashInfo->RepeatTimes = 0;
-        pstControlFlashInfo->StartTimes = 0;
-        pstControlFlashInfo->StopTimes = 0;
-        pstControlFlashInfo->IntermittentTimes = 0;
-    }
+    s_stControlInfo.bControlStart = false;
+
     return 0;
 }
 
 int Control_Init(void)
 {
+    if(s_stControlInfo.bControlInit == true)
+        return 0;
+
     int TaskNum = 0;
+
+    s_stControlInfo.bControlInit = true;
+    s_stControlInfo.bControlStart = false;
 
     for(TaskNum = 0; TaskNum < ControlTask_MAXNUM; TaskNum ++)
     {
+        s_bUpdateControlTaskFlashFlage[TaskNum] = false;
+        s_stUpdateControlTaskFlashInfo[TaskNum].RepeatTimes = 0;
+        s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes = 0;
+        s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes = 0;
+        s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes = 0;
+        s_stControlInfo.bControlTaskCreat[TaskNum] = false;
+        s_stControlInfo.enControlTaskMode[TaskNum] = Control_InvalidMode;
+        s_stControlInfo.stControlTaskFlashInfo[TaskNum].RepeatTimes = 0;
+        s_stControlInfo.stControlTaskFlashInfo[TaskNum].StartTimes = 0;
+        s_stControlInfo.stControlTaskFlashInfo[TaskNum].StopTimes = 0;
+        s_stControlInfo.stControlTaskFlashInfo[TaskNum].IntermittentTimes = 0;
         s_stControlTaskInfo[TaskNum].ControlStartFun = NULL;
         s_stControlTaskInfo[TaskNum].ControlStopFun = NULL;
-        s_enControlMode[TaskNum] = Control_InvalidMode;
-        s_stControlFlashInfo[TaskNum].RepeatTimes = 0;
-        s_stControlFlashInfo[TaskNum].StartTimes = 0;
-        s_stControlFlashInfo[TaskNum].StopTimes = 0;
-        s_stControlFlashInfo[TaskNum].IntermittentTimes = 0;
-        s_bUpdateControlFlashFlage[TaskNum] = false;
-        s_stUpdateControlFlashInfo[TaskNum].RepeatTimes = 0;
-        s_stUpdateControlFlashInfo[TaskNum].StartTimes = 0;
-        s_stUpdateControlFlashInfo[TaskNum].StopTimes = 0;
-        s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes = 0;
     }
     return 0;
 }
 
 int Control_DeInit(void)
 {
+    if(s_stControlInfo.bControlStart == true)
+        return -1;
+
+    if(s_stControlInfo.bControlInit == false)
+        return 0;
+
     int TaskNum = 0;
+
+    s_stControlInfo.bControlInit = false;
+    s_stControlInfo.bControlStart = false;
 
     for(TaskNum = 0; TaskNum < ControlTask_MAXNUM; TaskNum ++)
     {
+        s_bUpdateControlTaskFlashFlage[TaskNum] = false;
+        s_stUpdateControlTaskFlashInfo[TaskNum].RepeatTimes = 0;
+        s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes = 0;
+        s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes = 0;
+        s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes = 0;
+        s_stControlInfo.bControlTaskCreat[TaskNum] = false;
+        s_stControlInfo.enControlTaskMode[TaskNum] = Control_InvalidMode;
+        s_stControlInfo.stControlTaskFlashInfo[TaskNum].RepeatTimes = 0;
+        s_stControlInfo.stControlTaskFlashInfo[TaskNum].StartTimes = 0;
+        s_stControlInfo.stControlTaskFlashInfo[TaskNum].StopTimes = 0;
+        s_stControlInfo.stControlTaskFlashInfo[TaskNum].IntermittentTimes = 0;
         s_stControlTaskInfo[TaskNum].ControlStartFun = NULL;
         s_stControlTaskInfo[TaskNum].ControlStopFun = NULL;
-        s_enControlMode[TaskNum] = Control_InvalidMode;
-        s_stControlFlashInfo[TaskNum].RepeatTimes = 0;
-        s_stControlFlashInfo[TaskNum].StartTimes = 0;
-        s_stControlFlashInfo[TaskNum].StopTimes = 0;
-        s_stControlFlashInfo[TaskNum].IntermittentTimes = 0;
-        s_bUpdateControlFlashFlage[TaskNum] = false;
-        s_stUpdateControlFlashInfo[TaskNum].RepeatTimes = 0;
-        s_stUpdateControlFlashInfo[TaskNum].StartTimes = 0;
-        s_stUpdateControlFlashInfo[TaskNum].StopTimes = 0;
-        s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes = 0;
     }
     return 0;
 }
 
-int Control_CreatTaskInfo(ControTask_Info * pstControlTaskInfo)
+int Control_CreatTask(ControTask_Info * pstControlTaskInfo)
 {
+    if(s_stControlInfo.bControlInit == false)
+        return -1;
+
     int TaskNum = 0;
 
     if(pstControlTaskInfo == NULL)
@@ -211,26 +227,30 @@ int Control_CreatTaskInfo(ControTask_Info * pstControlTaskInfo)
         if(s_stControlTaskInfo[TaskNum].ControlStartFun == NULL
             && s_stControlTaskInfo[TaskNum].ControlStopFun == NULL)
         {
+            s_bUpdateControlTaskFlashFlage[TaskNum] = false;
+            s_stUpdateControlTaskFlashInfo[TaskNum].RepeatTimes = 0;
+            s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes = 0;
+            s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes = 0;
+            s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes = 0;
+            s_stControlInfo.bControlTaskCreat[TaskNum] = true;
+            s_stControlInfo.enControlTaskMode[TaskNum] = Control_InvalidMode;
+            s_stControlInfo.stControlTaskFlashInfo[TaskNum].RepeatTimes = 0;
+            s_stControlInfo.stControlTaskFlashInfo[TaskNum].StartTimes = 0;
+            s_stControlInfo.stControlTaskFlashInfo[TaskNum].StopTimes = 0;
+            s_stControlInfo.stControlTaskFlashInfo[TaskNum].IntermittentTimes = 0;
             s_stControlTaskInfo[TaskNum].ControlStartFun = pstControlTaskInfo->ControlStartFun;
             s_stControlTaskInfo[TaskNum].ControlStopFun = pstControlTaskInfo->ControlStopFun;
-            s_enControlMode[TaskNum] = Control_InvalidMode;
-            s_stControlFlashInfo[TaskNum].RepeatTimes = 0;
-            s_stControlFlashInfo[TaskNum].StartTimes = 0;
-            s_stControlFlashInfo[TaskNum].StopTimes = 0;
-            s_stControlFlashInfo[TaskNum].IntermittentTimes = 0;
-            s_bUpdateControlFlashFlage[TaskNum] = false;
-            s_stUpdateControlFlashInfo[TaskNum].RepeatTimes = 0;
-            s_stUpdateControlFlashInfo[TaskNum].StartTimes = 0;
-            s_stUpdateControlFlashInfo[TaskNum].StopTimes = 0;
-            s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes = 0;
             return TaskNum;
         }
     }
     return -1;
 }
 
-int Control_DestroyTaskInfo(int TaskNum, ControTask_Info * pstControlTaskInfo)
+int Control_DestroyTask(int TaskNum, ControTask_Info * pstControlTaskInfo)
 {
+    if(s_stControlInfo.bControlInit == false)
+        return -1;
+
     if(TaskNum < 0 || TaskNum >= ControlTask_MAXNUM
         || pstControlTaskInfo == NULL)
         return -1;
@@ -238,21 +258,67 @@ int Control_DestroyTaskInfo(int TaskNum, ControTask_Info * pstControlTaskInfo)
     if(s_stControlTaskInfo[TaskNum].ControlStartFun == pstControlTaskInfo->ControlStartFun
         && s_stControlTaskInfo[TaskNum].ControlStartFun == pstControlTaskInfo->ControlStartFun)
     {
+        s_bUpdateControlTaskFlashFlage[TaskNum] = false;
+        s_stUpdateControlTaskFlashInfo[TaskNum].RepeatTimes = 0;
+        s_stUpdateControlTaskFlashInfo[TaskNum].StartTimes = 0;
+        s_stUpdateControlTaskFlashInfo[TaskNum].StopTimes = 0;
+        s_stUpdateControlTaskFlashInfo[TaskNum].IntermittentTimes = 0;
+        s_stControlInfo.bControlTaskCreat[TaskNum] = false;
+        s_stControlInfo.enControlTaskMode[TaskNum] = Control_InvalidMode;
+        s_stControlInfo.stControlTaskFlashInfo[TaskNum].RepeatTimes = 0;
+        s_stControlInfo.stControlTaskFlashInfo[TaskNum].StartTimes = 0;
+        s_stControlInfo.stControlTaskFlashInfo[TaskNum].StopTimes = 0;
+        s_stControlInfo.stControlTaskFlashInfo[TaskNum].IntermittentTimes = 0;
         s_stControlTaskInfo[TaskNum].ControlStartFun = NULL;
         s_stControlTaskInfo[TaskNum].ControlStopFun = NULL;
-        s_enControlMode[TaskNum] = Control_InvalidMode;
-        s_stControlFlashInfo[TaskNum].RepeatTimes = 0;
-        s_stControlFlashInfo[TaskNum].StartTimes = 0;
-        s_stControlFlashInfo[TaskNum].StopTimes = 0;
-        s_stControlFlashInfo[TaskNum].IntermittentTimes = 0;
-        s_bUpdateControlFlashFlage[TaskNum] = false;
-        s_stUpdateControlFlashInfo[TaskNum].RepeatTimes = 0;
-        s_stUpdateControlFlashInfo[TaskNum].StartTimes = 0;
-        s_stUpdateControlFlashInfo[TaskNum].StopTimes = 0;
-        s_stUpdateControlFlashInfo[TaskNum].IntermittentTimes = 0;
         return 0;
     }
     return -1;
+}
+
+int Control_SetTaskMode(int TaskNum, Control_Mode enControlTaskMode, 
+                                ControlFlash_Info stControlTaskFlashInfo)
+{
+    if(TaskNum < 0 || TaskNum >= ControlTask_MAXNUM)
+        return -1;
+
+    if(s_stControlInfo.bControlStart == false || s_stControlInfo.bControlTaskCreat[TaskNum] == false)
+        return -1;
+
+    s_bUpdateControlTaskFlashFlage[TaskNum] = true;
+    s_stControlInfo.enControlTaskMode[TaskNum] = enControlTaskMode;
+    s_stControlInfo.stControlTaskFlashInfo[TaskNum].RepeatTimes = stControlTaskFlashInfo.RepeatTimes;
+    s_stControlInfo.stControlTaskFlashInfo[TaskNum].StartTimes = stControlTaskFlashInfo.StartTimes;
+    s_stControlInfo.stControlTaskFlashInfo[TaskNum].StopTimes = stControlTaskFlashInfo.StopTimes;
+    s_stControlInfo.stControlTaskFlashInfo[TaskNum].IntermittentTimes = stControlTaskFlashInfo.IntermittentTimes;
+
+    return 0;
+}
+
+int Control_GetTaskMode(int TaskNum, Control_Mode *penControlTaskMode, 
+                                ControlFlash_Info *pstControlTaskFlashInfo)
+{
+    if(TaskNum < 0 || TaskNum >= ControlTask_MAXNUM
+        || penControlTaskMode == NULL || pstControlTaskFlashInfo == NULL)
+        return -1;
+
+    *penControlTaskMode = s_stControlInfo.enControlTaskMode[TaskNum];
+    if(*penControlTaskMode == Control_LimitedFlashMode
+        || *penControlTaskMode == Control_UnlimitedFlashMode)
+    {
+        pstControlTaskFlashInfo->RepeatTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].RepeatTimes;
+        pstControlTaskFlashInfo->StartTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].StartTimes;
+        pstControlTaskFlashInfo->StopTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].StopTimes;
+        pstControlTaskFlashInfo->IntermittentTimes = s_stControlInfo.stControlTaskFlashInfo[TaskNum].IntermittentTimes;
+    }
+    else
+    {
+        pstControlTaskFlashInfo->RepeatTimes = 0;
+        pstControlTaskFlashInfo->StartTimes = 0;
+        pstControlTaskFlashInfo->StopTimes = 0;
+        pstControlTaskFlashInfo->IntermittentTimes = 0;
+    }
+    return 0;
 }
 
 //#define Control_MAIN_DEBUG
@@ -276,24 +342,26 @@ int main()
 {
     Control_Init();
 
+    Control_Start();
+
     ControTask_Info stControlTaskInfo = {0};
     stControlTaskInfo.ControlStartFun = Start;
     stControlTaskInfo.ControlStopFun = Stop;
-    int TaskNum = Control_CreatTaskInfo(&stControlTaskInfo);
+    int TaskNum = Control_CreatTask(&stControlTaskInfo);
 
-    ControlFlash_Info stControlFlashInfo = {0};
-    stControlFlashInfo.RepeatTimes = 3;
-    stControlFlashInfo.StartTimes = 3;
-    stControlFlashInfo.StopTimes = 3;
-    stControlFlashInfo.IntermittentTimes = 3;
-    Control_SetMode(TaskNum, Control_LimitedFlashMode, stControlFlashInfo);
+    ControlFlash_Info stControlTaskFlashInfo = {0};
+    stControlTaskFlashInfo.RepeatTimes = 3;
+    stControlTaskFlashInfo.StartTimes = 3;
+    stControlTaskFlashInfo.StopTimes = 3;
+    stControlTaskFlashInfo.IntermittentTimes = 3;
+    Control_SetTaskMode(TaskNum, Control_LimitedFlashMode, stControlTaskFlashInfo);
 
     while(1)
     {
-        Control_Mode enControlMode = Control_InvalidMode;
-        ControlFlash_Info stControlFlashInfo = {0};
-        Control_GetMode(TaskNum, &enControlMode, &stControlFlashInfo);
-        if(enControlMode == Control_StopMode)
+        Control_Mode enControlTaskMode = Control_InvalidMode;
+        ControlFlash_Info stControlTaskFlashInfo = {0};
+        Control_GetTaskMode(TaskNum, &enControlTaskMode, &stControlTaskFlashInfo);
+        if(enControlTaskMode == Control_StopMode)
         {
             break;
         }
@@ -301,7 +369,9 @@ int main()
         sleep(1);
     }
 
-    Control_DestroyTaskInfo(TaskNum, &stControlTaskInfo);
+    Control_DestroyTask(TaskNum, &stControlTaskInfo);
+
+    Control_Stop();
 
     Control_DeInit();
 

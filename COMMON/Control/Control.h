@@ -1,3 +1,9 @@
+/*
+    From : https://github.com/paiminlin/PM
+    From : https://blog.csdn.net/lpaim/article/details/125649860
+    Author : PaiMin.lin
+    Date : 2022.7.16
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,11 +48,9 @@ typedef struct ControlFlash_Info
 
 int Control_Run(void);
 
-int Control_SetMode(int TaskNum, Control_Mode enControlMode, 
-                                ControlFlash_Info stControlFlashInfo);
+int Control_Start(void);
 
-int Control_GetMode(int TaskNum, Control_Mode *penControlMode, 
-                                ControlFlash_Info *pstControlFlashInfo);
+int Control_Stop(void);
 
 int Control_Init(void);
 
@@ -55,6 +59,12 @@ int Control_DeInit(void);
 int Control_CreatTask(ControTask_Info * pstControlTaskInfo);
 
 int Control_DestroyTask(int TaskNum, ControTask_Info * pstControlTaskInfo);
+
+int Control_SetTaskMode(int TaskNum, Control_Mode enControlMode, 
+                                ControlFlash_Info stControlFlashInfo);
+
+int Control_GetTaskMode(int TaskNum, Control_Mode *penControlMode, 
+                                ControlFlash_Info *pstControlFlashInfo);
 
 #endif /* Control_H_ */
 
