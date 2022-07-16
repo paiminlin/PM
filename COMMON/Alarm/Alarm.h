@@ -2,7 +2,7 @@
     From : https://github.com/paiminlin/PM
     From : https://blog.csdn.net/lpaim/article/details/122160744
     Author : PaiMin.lin
-    Date : 2022.7.14
+    Date : 2022.7.16
 */
 
 #include <stdio.h>
@@ -46,8 +46,6 @@ int Alarm_Start(void);
 
 int Alarm_Stop(void);
 
-bool Alarm_GetStatus(int TaskNum);
-
 int Alarm_Init(void);
 
 int Alarm_DeInit(void);
@@ -55,6 +53,8 @@ int Alarm_DeInit(void);
 int Alarm_CreatTask(AlarmTask_Info * pstAlarmTaskInfo);
 
 int Alarm_DestroyTask(int TaskNum, AlarmTask_Info * pstAlarmTaskInfo);
+
+bool Alarm_GetTaskStatus(int TaskNum);
 
 #endif /* ALARM_H_ */
 

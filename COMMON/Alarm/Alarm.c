@@ -2,7 +2,7 @@
     From : https://github.com/paiminlin/PM
     From : https://blog.csdn.net/lpaim/article/details/122160744
     Author : PaiMin.lin
-    Date : 2022.7.14
+    Date : 2022.7.16
 */
 
 #include "Alarm.h"
@@ -22,7 +22,7 @@ typedef struct Alarm_Info
 {
     bool bAlarmInit;
     bool bAlarmStart;
-    bool bAlarmStatus[AlarmTask_MAXNUM];
+    bool bAlarmTaskStatus[AlarmTask_MAXNUM];
 } Alarm_Info;
 
 static int s_AlarmCounter[AlarmTask_MAXNUM] = {0};
@@ -52,13 +52,13 @@ int Alarm_Run(void)
                     if(s_enLastAlarmMode[TaskNum] != Alarm_Sill_Mode)
                         s_AlarmCounter[TaskNum] = 0;
 
-                    if(s_stAlarmInfo.bAlarmStatus[TaskNum] == false)
+                    if(s_stAlarmInfo.bAlarmTaskStatus[TaskNum] == false)
                     {
                         s_AlarmCounter[TaskNum] ++;
 
                         if(s_AlarmCounter[TaskNum] == s_stAlarmTaskInfo[TaskNum].AlarmSill.duration)
                         {
-                            s_stAlarmInfo.bAlarmStatus[TaskNum] = true;
+                            s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = true;
                             s_AlarmCounter[TaskNum] = 0;
 
                             if(s_stAlarmTaskInfo[TaskNum].AlarmSillFun != NULL)
@@ -73,13 +73,13 @@ int Alarm_Run(void)
                     if(s_enLastAlarmMode[TaskNum] != Alarm_Resume_Mode)
                         s_AlarmCounter[TaskNum] = 0;
 
-                    if(s_stAlarmInfo.bAlarmStatus[TaskNum] == true)
+                    if(s_stAlarmInfo.bAlarmTaskStatus[TaskNum] == true)
                     {
                         s_AlarmCounter[TaskNum] ++;
 
                         if(s_AlarmCounter[TaskNum] == s_stAlarmTaskInfo[TaskNum].AlarmResume.duration)
                         {
-                            s_stAlarmInfo.bAlarmStatus[TaskNum] = false;
+                            s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = false;
                             s_AlarmCounter[TaskNum] = 0;
 
                             if(s_stAlarmTaskInfo[TaskNum].AlarmResumeFun != NULL)
@@ -101,13 +101,13 @@ int Alarm_Run(void)
                     if(s_enLastAlarmMode[TaskNum] != Alarm_Sill_Mode)
                         s_AlarmCounter[TaskNum] = 0;
 
-                    if(s_stAlarmInfo.bAlarmStatus[TaskNum] == false)
+                    if(s_stAlarmInfo.bAlarmTaskStatus[TaskNum] == false)
                     {
                         s_AlarmCounter[TaskNum] ++;
 
                         if(s_AlarmCounter[TaskNum] == s_stAlarmTaskInfo[TaskNum].AlarmSill.duration)
                         {
-                            s_stAlarmInfo.bAlarmStatus[TaskNum] = true;
+                            s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = true;
                             s_AlarmCounter[TaskNum] = 0;
 
                             if(s_stAlarmTaskInfo[TaskNum].AlarmSillFun != NULL)
@@ -122,13 +122,13 @@ int Alarm_Run(void)
                     if(s_enLastAlarmMode[TaskNum] != Alarm_Resume_Mode)
                         s_AlarmCounter[TaskNum] = 0;
 
-                    if(s_stAlarmInfo.bAlarmStatus[TaskNum] == true)
+                    if(s_stAlarmInfo.bAlarmTaskStatus[TaskNum] == true)
                     {
                         s_AlarmCounter[TaskNum] ++;
 
                         if(s_AlarmCounter[TaskNum] == s_stAlarmTaskInfo[TaskNum].AlarmResume.duration)
                         {
-                            s_stAlarmInfo.bAlarmStatus[TaskNum] = false;
+                            s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = false;
                             s_AlarmCounter[TaskNum] = 0;
 
                             if(s_stAlarmTaskInfo[TaskNum].AlarmResumeFun != NULL)
@@ -164,14 +164,6 @@ int Alarm_Stop(void)
     return 0;
 }
 
-bool Alarm_GetStatus(int TaskNum)
-{
-    if(TaskNum < 0 || TaskNum >= AlarmTask_MAXNUM)
-        return -1;
-
-    return s_stAlarmInfo.bAlarmStatus[TaskNum];
-}
-
 int Alarm_Init(void)
 {
     if(s_stAlarmInfo.bAlarmInit == true)
@@ -185,7 +177,7 @@ int Alarm_Init(void)
     for(TaskNum = 0; TaskNum <AlarmTask_MAXNUM; TaskNum ++)
     {
         s_AlarmCounter[TaskNum] = 0;
-        s_stAlarmInfo.bAlarmStatus[TaskNum] = false;
+        s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = false;
         s_enLastAlarmMode[TaskNum] = Alarm_Invalid_Mode;
         s_stAlarmTaskInfo[TaskNum].AlarmSill.Threshold = 0;
         s_stAlarmTaskInfo[TaskNum].AlarmSill.duration = 0;
@@ -214,7 +206,7 @@ int Alarm_DeInit(void)
     for(TaskNum = 0; TaskNum <AlarmTask_MAXNUM; TaskNum ++)
     {
         s_AlarmCounter[TaskNum] = 0;
-        s_stAlarmInfo.bAlarmStatus[TaskNum] = false;
+        s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = false;
         s_enLastAlarmMode[TaskNum] = Alarm_Invalid_Mode;
         s_stAlarmTaskInfo[TaskNum].AlarmSill.Threshold = 0;
         s_stAlarmTaskInfo[TaskNum].AlarmSill.duration = 0;
@@ -244,7 +236,7 @@ int Alarm_CreatTask(AlarmTask_Info * pstAlarmTaskInfo)
             && s_stAlarmTaskInfo[TaskNum].AlarmResumeFun == NULL)
         {
             s_AlarmCounter[TaskNum] = 0;
-            s_stAlarmInfo.bAlarmStatus[TaskNum] = false;
+            s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = false;
             s_enLastAlarmMode[TaskNum] = Alarm_Invalid_Mode;
             s_stAlarmTaskInfo[TaskNum].AlarmSill.Threshold = pstAlarmTaskInfo->AlarmSill.Threshold;
             s_stAlarmTaskInfo[TaskNum].AlarmSill.duration = pstAlarmTaskInfo->AlarmSill.duration;
@@ -277,7 +269,7 @@ int Alarm_DestroyTask(int TaskNum, AlarmTask_Info * pstAlarmTaskInfo)
         && s_stAlarmTaskInfo[TaskNum].AlarmResumeFun == pstAlarmTaskInfo->AlarmResumeFun)
     {
         s_AlarmCounter[TaskNum] = 0;
-        s_stAlarmInfo.bAlarmStatus[TaskNum] = false;
+        s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = false;
         s_enLastAlarmMode[TaskNum] = Alarm_Invalid_Mode;
         s_stAlarmTaskInfo[TaskNum].AlarmSill.Threshold = 0;
         s_stAlarmTaskInfo[TaskNum].AlarmSill.duration = 0;
@@ -289,6 +281,14 @@ int Alarm_DestroyTask(int TaskNum, AlarmTask_Info * pstAlarmTaskInfo)
         return 0;
     }
     return -1;
+}
+
+bool Alarm_GetTaskStatus(int TaskNum)
+{
+    if(TaskNum < 0 || TaskNum >= AlarmTask_MAXNUM)
+        return -1;
+
+    return s_stAlarmInfo.bAlarmTaskStatus[TaskNum];
 }
 
 //#define ALARM_MAIN_DEBUG
@@ -351,7 +351,7 @@ int main()
     while(1)
     {
         Alarm_Run();
-        if(Alarm_GetStatus(TaskNum) == true)
+        if(Alarm_GetTaskStatus(TaskNum) == true)
         {
             printf("Task in Alarm\n");
         }
