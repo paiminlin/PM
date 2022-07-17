@@ -1,3 +1,9 @@
+/*
+    From : https://github.com/paiminlin/PM
+    From : 
+    Author : PaiMin.lin
+    Date : 2022.7.17
+*/
 
 #include "Param.h"
 
@@ -20,8 +26,7 @@ int Param_Update(Param_Module enParamModule)
     if(s_stParamInfo.bParamInit == false)
         return 0;
 
-    if(s_stParamInfo.bParamUpdate[Param_Module_1] == true
-        && (enParamModule == Param_Module_1 || enParamModule == Param_Module_Invalid))
+    if(enParamModule == Param_Module_1 && s_stParamInfo.bParamUpdate[Param_Module_1] == true)
     {
         s_stParamInfo.bParamUpdate[Param_Module_1] = false;
         if(stParamModuleInfo.ParamModule1Fun != NULL)
@@ -31,8 +36,7 @@ int Param_Update(Param_Module enParamModule)
         }
     }
 
-    if(s_stParamInfo.bParamUpdate[Param_Module_2] == true
-        && (enParamModule == Param_Module_2 || enParamModule == Param_Module_Invalid))
+    if(enParamModule == Param_Module_2 && s_stParamInfo.bParamUpdate[Param_Module_2] == true)
     {
         s_stParamInfo.bParamUpdate[Param_Module_2] = false;
         if(stParamModuleInfo.ParamModule2Fun != NULL)
@@ -92,7 +96,6 @@ int Param_Init(ParamModule_Info * pstParamModuleInfo)
     stParamModuleInfo.ParamModule2Fun = pstParamModuleInfo->ParamModule2Fun;
 
     memset(&stParamModuleData, 0x00, sizeof(ParamModule_Data));
-
     for(enParamModule = Param_Module_1; enParamModule < Param_Module_Invalid; enParamModule ++)
     {
         Param_Reset(enParamModule, true);
