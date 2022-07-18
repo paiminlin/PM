@@ -67,9 +67,9 @@ typedef struct ParamModule_Info
     ParamModule2_Fun ParamModule2Fun;
 } ParamModule_Info;
 
-int Param_Update(Param_Module enParamModule, bool bForceReset);
+int Param_Update(bool bForceUpdate);
 
-int Param_Reset(Param_Module enParamModule, bool bForceReset);
+int Param_Reset(bool bForceReset);
 
 int Param_Init(ParamModule_Info * pstParamModuleInfo);
 

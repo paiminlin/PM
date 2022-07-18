@@ -21,13 +21,12 @@ static Param_Info s_stParamInfo = {0};
 static ParamModule_Info stParamModuleInfo = {0};
 static ParamModule_Data stParamModuleData = {0};
 
-int Param_Update(Param_Module enParamModule, bool bForceReset)
+int Param_Update(bool bForceUpdate)
 {
     if(s_stParamInfo.bParamInit == false)
         return 0;
 
-    if(enParamModule == Param_Module_1 && 
-        (s_stParamInfo.bParamUpdate[Param_Module_1] == true || bForceReset == true))
+    if(s_stParamInfo.bParamUpdate[Param_Module_1] == true || bForceUpdate == true)
     {
         s_stParamInfo.bParamUpdate[Param_Module_1] = false;
         if(stParamModuleInfo.ParamModule1Fun != NULL)
@@ -37,8 +36,7 @@ int Param_Update(Param_Module enParamModule, bool bForceReset)
         }
     }
 
-    if(enParamModule == Param_Module_2 && 
-        (s_stParamInfo.bParamUpdate[Param_Module_2] == true || bForceReset == true))
+    if(s_stParamInfo.bParamUpdate[Param_Module_2] == true || bForceUpdate == true)
     {
         s_stParamInfo.bParamUpdate[Param_Module_2] = false;
         if(stParamModuleInfo.ParamModule2Fun != NULL)
@@ -51,12 +49,12 @@ int Param_Update(Param_Module enParamModule, bool bForceReset)
 
 }
 
-int Param_Reset(Param_Module enParamModule, bool bForceReset)
+int Param_Reset(bool bForceReset)
 {
     if(s_stParamInfo.bParamInit == false)
         return -1;
 
-    if(enParamModule == Param_Module_1 && stParamModuleInfo.ParamModule1Fun != NULL)
+    if(stParamModuleInfo.ParamModule1Fun != NULL)
     {
         ParamModule_Data1 stParamModuleData1 = {0};
         if((stParamModuleInfo.ParamModule1Fun(Param_Deal_Read, stParamModuleData1.Buf, 
@@ -66,7 +64,7 @@ int Param_Reset(Param_Module enParamModule, bool bForceReset)
         }
     }
 
-    if(enParamModule == Param_Module_2 && stParamModuleInfo.ParamModule2Fun != NULL)
+    if(stParamModuleInfo.ParamModule2Fun != NULL)
     {
         ParamModule_Data2 stParamModuleData2 = {0};
         if((stParamModuleInfo.ParamModule2Fun(Param_Deal_Read, stParamModuleData2.Buf, 
@@ -98,10 +96,8 @@ int Param_Init(ParamModule_Info * pstParamModuleInfo)
     stParamModuleInfo.ParamModule2Fun = pstParamModuleInfo->ParamModule2Fun;
 
     memset(&stParamModuleData, 0x00, sizeof(ParamModule_Data));
-    for(enParamModule = Param_Module_1; enParamModule < Param_Module_Invalid; enParamModule ++)
-    {
-        Param_Reset(enParamModule, true);
-    }
+    Param_Reset(true);
+
     return 0;
 }
 
@@ -228,7 +224,8 @@ int ParamModule1Fun(Param_Deal enParamDeal, void * pData, int length)
             return -1;
         }
 
-        if(fwrite(pData, length, 1, fp) < 0){
+        ret = fwrite(pData, length, 1, fp);
+        if(ret < 0){
             printf("%s-%d\n",__func__, __LINE__);
             fclose(fp);
             return -1;
@@ -271,7 +268,7 @@ int main()
     Param_GetModuleData(Param_Module_1, stParamModuleData1.Buf, sizeof(stParamModuleData1.Buf));
     printf("%s\n", stParamModuleData1.Buf);
 
-    Param_Update(Param_Module_1, false);
+    Param_Update(true);
 
     Param_DeInit();
 
