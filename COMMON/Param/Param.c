@@ -2,7 +2,7 @@
     From : https://github.com/paiminlin/PM
     From : 
     Author : PaiMin.lin
-    Date : 2022.7.18
+    Date : 2022.7.19
 */
 
 #include "Param.h"
@@ -95,7 +95,7 @@ int Param_Init(ParamModule_Info * pstParamModuleInfo)
     stParamModuleInfo.ParamModule1Fun = pstParamModuleInfo->ParamModule1Fun;
     stParamModuleInfo.ParamModule2Fun = pstParamModuleInfo->ParamModule2Fun;
 
-    memset(&stParamModuleData, 0x00, sizeof(ParamModule_Data));
+    memset(&stParamModuleData, 0x00, sizeof(stParamModuleData));
     Param_Reset(true);
 
     return 0;
@@ -115,7 +115,7 @@ int Param_DeInit(void)
     }
     stParamModuleInfo.ParamModule1Fun = NULL;
     stParamModuleInfo.ParamModule2Fun = NULL;
-    memset(&stParamModuleData, 0x00, sizeof(ParamModule_Data));
+    memset(&stParamModuleData, 0x00, sizeof(stParamModuleData));
 
     return 0;
 }
