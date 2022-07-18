@@ -2,7 +2,7 @@
     From : https://github.com/paiminlin/PM
     From : 
     Author : PaiMin.lin
-    Date : 2022.7.17
+    Date : 2022.7.18
 */
 
 #include <stdio.h>
@@ -67,9 +67,9 @@ typedef struct ParamModule_Info
     ParamModule2_Fun ParamModule2Fun;
 } ParamModule_Info;
 
-int Param_Update(Param_Module enParamModule);
+int Param_Update(Param_Module enParamModule, bool bForceReset);
 
-int Param_Reset(Param_Module enParamModule, bool bReset);
+int Param_Reset(Param_Module enParamModule, bool bForceReset);
 
 int Param_Init(ParamModule_Info * pstParamModuleInfo);
 
