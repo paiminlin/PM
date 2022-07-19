@@ -18,8 +18,8 @@ typedef struct Param_Info
 } Param_Info;
 
 static Param_Info s_stParamInfo = {0};
-static ParamModule_Info stParamModuleInfo = {0};
-static ParamModule_Data stParamModuleData = {0};
+static ParamModule_Info s_stParamModuleInfo = {0};
+static ParamModule_Data s_stParamModuleData = {0};
 
 int Param_Update(bool bForceUpdate)
 {
@@ -29,20 +29,20 @@ int Param_Update(bool bForceUpdate)
     if(s_stParamInfo.bParamUpdate[Param_Module_1] == true || bForceUpdate == true)
     {
         s_stParamInfo.bParamUpdate[Param_Module_1] = false;
-        if(stParamModuleInfo.ParamModule1Fun != NULL)
+        if(s_stParamModuleInfo.ParamModule1Fun != NULL)
         {
-            stParamModuleInfo.ParamModule1Fun(Param_Deal_Write, stParamModuleData.stParamModuleData1.Buf, 
-                                                sizeof(stParamModuleData.stParamModuleData1.Buf));
+            s_stParamModuleInfo.ParamModule1Fun(Param_Deal_Write, s_stParamModuleData.stParamModuleData1.Buf, 
+                                                sizeof(s_stParamModuleData.stParamModuleData1.Buf));
         }
     }
 
     if(s_stParamInfo.bParamUpdate[Param_Module_2] == true || bForceUpdate == true)
     {
         s_stParamInfo.bParamUpdate[Param_Module_2] = false;
-        if(stParamModuleInfo.ParamModule2Fun != NULL)
+        if(s_stParamModuleInfo.ParamModule2Fun != NULL)
         {
-            stParamModuleInfo.ParamModule2Fun(Param_Deal_Write, stParamModuleData.stParamModuleData2.Buf, 
-                                                sizeof(stParamModuleData.stParamModuleData2.Buf));
+            s_stParamModuleInfo.ParamModule2Fun(Param_Deal_Write, s_stParamModuleData.stParamModuleData2.Buf, 
+                                                sizeof(s_stParamModuleData.stParamModuleData2.Buf));
         }
     }
     return 0;
@@ -54,23 +54,23 @@ int Param_Reset(bool bForceReset)
     if(s_stParamInfo.bParamInit == false)
         return -1;
 
-    if(stParamModuleInfo.ParamModule1Fun != NULL)
+    if(s_stParamModuleInfo.ParamModule1Fun != NULL)
     {
-        ParamModule_Data1 stParamModuleData1 = {0};
-        if((stParamModuleInfo.ParamModule1Fun(Param_Deal_Read, stParamModuleData1.Buf, 
-                                            sizeof(stParamModuleData1.Buf)) == 0) || bForceReset == true)
+        ParamModule_Data1 s_stParamModuleData1 = {0};
+        if((s_stParamModuleInfo.ParamModule1Fun(Param_Deal_Read, s_stParamModuleData1.Buf, 
+                                            sizeof(s_stParamModuleData1.Buf)) == 0) || bForceReset == true)
         {
-            memcpy(stParamModuleData.stParamModuleData1.Buf, stParamModuleData1.Buf, sizeof(stParamModuleData1.Buf));
+            memcpy(s_stParamModuleData.stParamModuleData1.Buf, s_stParamModuleData1.Buf, sizeof(s_stParamModuleData1.Buf));
         }
     }
 
-    if(stParamModuleInfo.ParamModule2Fun != NULL)
+    if(s_stParamModuleInfo.ParamModule2Fun != NULL)
     {
-        ParamModule_Data2 stParamModuleData2 = {0};
-        if((stParamModuleInfo.ParamModule2Fun(Param_Deal_Read, stParamModuleData2.Buf, 
-                                            sizeof(stParamModuleData2.Buf)) == 0) || bForceReset == true)
+        ParamModule_Data2 s_stParamModuleData2 = {0};
+        if((s_stParamModuleInfo.ParamModule2Fun(Param_Deal_Read, s_stParamModuleData2.Buf, 
+                                            sizeof(s_stParamModuleData2.Buf)) == 0) || bForceReset == true)
         {
-            memcpy(stParamModuleData.stParamModuleData2.Buf, stParamModuleData2.Buf, sizeof(stParamModuleData2.Buf));
+            memcpy(s_stParamModuleData.stParamModuleData2.Buf, s_stParamModuleData2.Buf, sizeof(s_stParamModuleData2.Buf));
         }
     }
     return 0;
@@ -92,10 +92,10 @@ int Param_Init(ParamModule_Info * pstParamModuleInfo)
         s_stParamInfo.bParamUpdate[enParamModule] = false;
     }
 
-    stParamModuleInfo.ParamModule1Fun = pstParamModuleInfo->ParamModule1Fun;
-    stParamModuleInfo.ParamModule2Fun = pstParamModuleInfo->ParamModule2Fun;
+    s_stParamModuleInfo.ParamModule1Fun = pstParamModuleInfo->ParamModule1Fun;
+    s_stParamModuleInfo.ParamModule2Fun = pstParamModuleInfo->ParamModule2Fun;
 
-    memset(&stParamModuleData, 0x00, sizeof(stParamModuleData));
+    memset(&s_stParamModuleData, 0x00, sizeof(s_stParamModuleData));
     Param_Reset(true);
 
     return 0;
@@ -113,9 +113,9 @@ int Param_DeInit(void)
     {
         s_stParamInfo.bParamUpdate[enParamModule] = false;
     }
-    stParamModuleInfo.ParamModule1Fun = NULL;
-    stParamModuleInfo.ParamModule2Fun = NULL;
-    memset(&stParamModuleData, 0x00, sizeof(stParamModuleData));
+    s_stParamModuleInfo.ParamModule1Fun = NULL;
+    s_stParamModuleInfo.ParamModule2Fun = NULL;
+    memset(&s_stParamModuleData, 0x00, sizeof(s_stParamModuleData));
 
     return 0;
 }
@@ -131,18 +131,18 @@ int Param_SetModuleData(Param_Module enParamModule, void * pData, int length)
     switch(enParamModule)
     {
         case Param_Module_1:
-            if(memcmp(stParamModuleData.stParamModuleData1.Buf, (char *)pData, length) != 0)
+            if(memcmp(s_stParamModuleData.stParamModuleData1.Buf, (char *)pData, length) != 0)
             {
                 s_stParamInfo.bParamUpdate[Param_Module_1] = true;
-                memcpy(stParamModuleData.stParamModuleData1.Buf, (char *)pData, length);
+                memcpy(s_stParamModuleData.stParamModuleData1.Buf, (char *)pData, length);
             }
             break;
 
         case Param_Module_2:
-            if(memcmp(stParamModuleData.stParamModuleData2.Buf, (char *)pData, length) != 0)
+            if(memcmp(s_stParamModuleData.stParamModuleData2.Buf, (char *)pData, length) != 0)
             {
                 s_stParamInfo.bParamUpdate[Param_Module_2] = true;
-                memcpy(stParamModuleData.stParamModuleData2.Buf, (char *)pData, length);
+                memcpy(s_stParamModuleData.stParamModuleData2.Buf, (char *)pData, length);
             }
             break;
 
@@ -164,11 +164,11 @@ int Param_GetModuleData(Param_Module enParamModule, void * pData, int length)
     switch(enParamModule)
     {
         case Param_Module_1:
-            memcpy((char *)pData, stParamModuleData.stParamModuleData1.Buf, length);
+            memcpy((char *)pData, s_stParamModuleData.stParamModuleData1.Buf, length);
             break;
 
         case Param_Module_2:
-            memcpy((char *)pData, stParamModuleData.stParamModuleData2.Buf, length);
+            memcpy((char *)pData, s_stParamModuleData.stParamModuleData2.Buf, length);
             break;
 
         default :
