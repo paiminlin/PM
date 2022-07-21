@@ -70,6 +70,8 @@ int Key_Init(void)
     if(s_stKeyInfo.bKeyInit == true)
         return 0;
 
+    s_stKeyInfo.bKeyInit = true;
+
     int TaskNum = 0;
     for(TaskNum = 0; TaskNum < KeyTask_MAXNUM; TaskNum ++)
     {
@@ -88,6 +90,8 @@ int Key_DeInit(void)
 {
     if(s_stKeyInfo.bKeyInit == false)
         return 0;
+
+    s_stKeyInfo.bKeyInit = false;
 
     int TaskNum = 0;
     for(TaskNum = 0; TaskNum < KeyTask_MAXNUM; TaskNum ++)
