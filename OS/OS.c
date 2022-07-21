@@ -2,7 +2,7 @@
     From : https://github.com/paiminlin/PM
     From : https://blog.csdn.net/lpaim/article/details/122160263
     Author : PaiMin.lin
-    Date : 2022.7.15
+    Date : 2022.7.21
 */
 
 #include "OS.h"
@@ -119,7 +119,12 @@ int OS_Reset(void)
 
 int OS_WakeUp(OSTask_WakeUp enOSTaskWakeUp, OSTask_Grab enOSTaskGrab)
 {
-    if(enOSTaskWakeUp == OSTask_WakeUp_1MSTimer)
+    if(enOSTaskWakeUp == OSTask_WakeUp_Grab)
+    {
+        s_stOSInfo.enOSTaskWakeUp = OSTask_WakeUp_Grab;
+        s_stOSInfo.enOSTaskGrab = enOSTaskGrab;
+    }
+    else if(enOSTaskWakeUp == OSTask_WakeUp_1MSTimer)
     {
         s_stOSInfo.enOSTaskWakeUp = OSTask_WakeUp_1MSTimer;
         if(s_10MsConunt == 10)
@@ -131,11 +136,6 @@ int OS_WakeUp(OSTask_WakeUp enOSTaskWakeUp, OSTask_Grab enOSTaskGrab)
             s_100MsConunt = 1;
         else
             s_100MsConunt ++;
-    }
-    else if(enOSTaskWakeUp == OSTask_WakeUp_Grab)
-    {
-        s_stOSInfo.enOSTaskWakeUp = OSTask_WakeUp_Grab;
-        s_stOSInfo.enOSTaskGrab = enOSTaskGrab;
     }
     return 0;
 }
