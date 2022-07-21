@@ -12,9 +12,9 @@ LeftChar=1
 Order=38
 Focused=38
 [Editor_11]
-CursorCol=1
-CursorRow=1
-TopLine=1
+CursorCol=33
+CursorRow=194
+TopLine=183
 LeftChar=1
 [Editor_12]
 CursorCol=1
@@ -57,9 +57,9 @@ CursorRow=77
 TopLine=53
 LeftChar=1
 [Editor_38]
-CursorCol=17
-CursorRow=262
-TopLine=238
+CursorCol=12
+CursorRow=16
+TopLine=1
 LeftChar=1
 [Editor_39]
 CursorCol=1

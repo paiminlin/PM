@@ -34,6 +34,17 @@ int Key_Run(void)
         {
             if(s_stKeyTaskInfo[TaskNum].KeyGetStatusFun != NULL)
             {
+                enKeyStatus = s_stKeyTaskInfo[TaskNum].KeyGetStatusFun();
+                if(enKeyStatus == Key_PressDown_Status
+                    && s_stKeyInfo.KeyPressDownTimes[TaskNum] != KeyPressDown_MAXTIMES)
+                {
+                    s_stKeyInfo.KeyPressDownTimes[TaskNum] ++;
+                }
+                else if(enKeyStatus == Key_Release_Status)
+                {
+                    s_stKeyInfo.KeyPressDownTimes[TaskNum] = 0;
+                }
+
                 if(s_stKeyInfo.KeyPressDownTimes[TaskNum] == s_stKeyTaskInfo[TaskNum].stKeyAttribute.ShortPressTimes)
                 {
                     if(s_stKeyTaskInfo[TaskNum].KeyHandleFun != NULL)
@@ -47,17 +58,6 @@ int Key_Run(void)
                     {
                         s_stKeyTaskInfo[TaskNum].KeyHandleFun(Key_Long_PressStatus);
                     }
-                }
-
-                enKeyStatus = s_stKeyTaskInfo[TaskNum].KeyGetStatusFun();
-                if(enKeyStatus == Key_PressDown_Status
-                    && s_stKeyInfo.KeyPressDownTimes[TaskNum] != KeyPressDown_MAXTIMES)
-                {
-                    s_stKeyInfo.KeyPressDownTimes[TaskNum] ++;
-                }
-                else if(enKeyStatus == Key_Release_Status)
-                {
-                    s_stKeyInfo.KeyPressDownTimes[TaskNum] = 0;
                 }
             }
         }
@@ -164,8 +164,57 @@ int Key_DestroyTask(int TaskNum, KeyTask_Info * pstKeyTaskInfo)
 //#define Key_MAIN_DEBUG
 #ifdef Key_MAIN_DEBUG
 
+#include <time.h>
+
+Key_Status KeyGetStatusFun(void)
+{
+    time_t seconds;
+    seconds = time(NULL);
+    struct tm * gmt;
+    gmt = localtime(&seconds);
+    if(gmt->tm_sec%10 == 0)
+    {
+//        printf("%s-%d\n",__func__, __LINE__);
+        return Key_Release_Status;
+    }
+    else
+    {
+//        printf("%s-%d\n",__func__, __LINE__);
+        return Key_PressDown_Status;
+    }
+}
+
+int KeyHandleFun(Key_PressStatus enKeyPressStatus)
+{
+    if(enKeyPressStatus == Key_Short_PressStatus)
+        printf("Short_Press\n");
+    else if(enKeyPressStatus == Key_Long_PressStatus)
+        printf("Long_Press\n");
+    return 0;
+}
+
 int main()
 {
+    Key_Init();
+
+    KeyTask_Info stKeyTaskInfo = {0};
+    stKeyTaskInfo.stKeyAttribute.ShortPressTimes = 2;
+    stKeyTaskInfo.stKeyAttribute.LongPressTimes = 5;
+    stKeyTaskInfo.KeyGetStatusFun = KeyGetStatusFun;
+    stKeyTaskInfo.KeyHandleFun = KeyHandleFun;
+    int TaskNum = Key_CreatTask(&stKeyTaskInfo);
+
+    while(1)
+    {
+        Key_Run();
+
+        sleep(1);
+    }
+
+    Key_DestroyTask(TaskNum, &stKeyTaskInfo);
+
+    Key_DeInit();
+
     return 0;
 }
 #endif

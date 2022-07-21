@@ -4,8 +4,8 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = COMMON/Alarm/Alarm.o COMMON/Control/Control.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o OS/OS.o main.o HAL/Hall_Motor/Hall_Motor.o COMMON/Cjson/cJSON.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/dictionary.o COMMON/Ini/iniparser.o COMMON/Crc/demo_crc.o State/State.o COMMON/Param/Param.o
-LINKOBJ  = COMMON/Alarm/Alarm.o COMMON/Control/Control.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o OS/OS.o main.o HAL/Hall_Motor/Hall_Motor.o COMMON/Cjson/cJSON.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/dictionary.o COMMON/Ini/iniparser.o COMMON/Crc/demo_crc.o State/State.o COMMON/Param/Param.o
+OBJ      = COMMON/Alarm/Alarm.o COMMON/Control/Control.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o OS/OS.o main.o HAL/Hall_Motor/Hall_Motor.o COMMON/Cjson/cJSON.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/dictionary.o COMMON/Ini/iniparser.o COMMON/Crc/demo_crc.o State/State.o COMMON/Param/Param.o HAL/Key/Key.o
+LINKOBJ  = COMMON/Alarm/Alarm.o COMMON/Control/Control.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o OS/OS.o main.o HAL/Hall_Motor/Hall_Motor.o COMMON/Cjson/cJSON.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/dictionary.o COMMON/Ini/iniparser.o COMMON/Crc/demo_crc.o State/State.o COMMON/Param/Param.o HAL/Key/Key.o
 LIBS     = -L"E:/Dev-Cpp/TDM-GCC-64/lib" -L"E:/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib" -static-libgcc -pg
 INCS     = -I"E:/Dev-Cpp/TDM-GCC-64/include" -I"E:/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"E:/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
 CXXINCS  = -I"E:/Dev-Cpp/TDM-GCC-64/include" -I"E:/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"E:/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"E:/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
@@ -65,3 +65,6 @@ State/State.o: State/State.c
 
 COMMON/Param/Param.o: COMMON/Param/Param.c
 	$(CC) -c COMMON/Param/Param.c -o COMMON/Param/Param.o $(CFLAGS)
+
+HAL/Key/Key.o: HAL/Key/Key.c
+	$(CC) -c HAL/Key/Key.c -o HAL/Key/Key.o $(CFLAGS)
