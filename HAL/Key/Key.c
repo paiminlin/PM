@@ -2,7 +2,7 @@
     From : https://github.com/paiminlin/PM
     From : 
     Author : PaiMin.lin
-    Date : 2022.7.21
+    Date : 2022.7.22
 */
 
 #include "Key.h"
@@ -16,6 +16,7 @@ typedef struct Key_Info
     bool bKeyInit;
     bool bKeyTaskCreat[KeyTask_MAXNUM];
     int KeyPressDownTimes[KeyTask_MAXNUM];
+    bool bSticky[KeyTask_MAXNUM];
 } Key_Info;
 
 static Key_Info s_stKeyInfo = {0};
@@ -36,28 +37,38 @@ int Key_Run(void)
             {
                 enKeyStatus = s_stKeyTaskInfo[TaskNum].KeyGetStatusFun();
                 if(enKeyStatus == Key_PressDown_Status
-                    && s_stKeyInfo.KeyPressDownTimes[TaskNum] != KeyPressDown_MAXTIMES)
+                    && s_stKeyInfo.bSticky[TaskNum] == false)
                 {
                     s_stKeyInfo.KeyPressDownTimes[TaskNum] ++;
                 }
                 else if(enKeyStatus == Key_Release_Status)
                 {
                     s_stKeyInfo.KeyPressDownTimes[TaskNum] = 0;
+                    s_stKeyInfo.bSticky[TaskNum] = false;
                 }
 
-                if(s_stKeyInfo.KeyPressDownTimes[TaskNum] == s_stKeyTaskInfo[TaskNum].stKeyAttribute.ShortPressTimes)
+                if(s_stKeyInfo.KeyPressDownTimes[TaskNum] == s_stKeyTaskInfo[TaskNum].stKeyAttribute.ShortPressTimes
+                    && s_stKeyInfo.bSticky[TaskNum] == false)
                 {
                     if(s_stKeyTaskInfo[TaskNum].KeyHandleFun != NULL)
                     {
                         s_stKeyTaskInfo[TaskNum].KeyHandleFun(Key_Short_PressStatus);
                     }
                 }
-                else if(s_stKeyInfo.KeyPressDownTimes[TaskNum]%s_stKeyTaskInfo[TaskNum].stKeyAttribute.LongPressTimes == 0)
+                else if(s_stKeyInfo.KeyPressDownTimes[TaskNum] >= s_stKeyTaskInfo[TaskNum].stKeyAttribute.LongPressTimes
+                    && s_stKeyInfo.KeyPressDownTimes[TaskNum]%s_stKeyTaskInfo[TaskNum].stKeyAttribute.LongPressTimes == 0
+                    && s_stKeyInfo.bSticky[TaskNum] == false)
                 {
                     if(s_stKeyTaskInfo[TaskNum].KeyHandleFun != NULL)
                     {
                         s_stKeyTaskInfo[TaskNum].KeyHandleFun(Key_Long_PressStatus);
                     }
+                }
+
+                if(s_stKeyInfo.KeyPressDownTimes[TaskNum] == KeyPressDown_MAXTIMES)
+                {
+                    printf("Sticky\n");
+                    s_stKeyInfo.bSticky[TaskNum] = true;
                 }
             }
         }
@@ -77,6 +88,7 @@ int Key_Init(void)
     {
         s_stKeyInfo.bKeyTaskCreat[TaskNum] = false;
         s_stKeyInfo.KeyPressDownTimes[TaskNum] = 0;
+        s_stKeyInfo.bSticky[TaskNum] = false;
 
         s_stKeyTaskInfo[TaskNum].stKeyAttribute.ShortPressTimes = 0;
         s_stKeyTaskInfo[TaskNum].stKeyAttribute.LongPressTimes = 0;
@@ -98,6 +110,7 @@ int Key_DeInit(void)
     {
         s_stKeyInfo.bKeyTaskCreat[TaskNum] = false;
         s_stKeyInfo.KeyPressDownTimes[TaskNum] = 0;
+        s_stKeyInfo.bSticky[TaskNum] = false;
 
         s_stKeyTaskInfo[TaskNum].stKeyAttribute.ShortPressTimes = 0;
         s_stKeyTaskInfo[TaskNum].stKeyAttribute.LongPressTimes = 0;
@@ -124,6 +137,7 @@ int Key_CreatTask(KeyTask_Info * pstKeyTaskInfo)
         {
             s_stKeyInfo.bKeyTaskCreat[TaskNum] = true;
             s_stKeyInfo.KeyPressDownTimes[TaskNum] = 0;
+            s_stKeyInfo.bSticky[TaskNum] = false;
 
             s_stKeyTaskInfo[TaskNum].stKeyAttribute.ShortPressTimes = pstKeyTaskInfo->stKeyAttribute.ShortPressTimes;
             s_stKeyTaskInfo[TaskNum].stKeyAttribute.LongPressTimes = pstKeyTaskInfo->stKeyAttribute.LongPressTimes;
@@ -151,6 +165,7 @@ int Key_DestroyTask(int TaskNum, KeyTask_Info * pstKeyTaskInfo)
     {
         s_stKeyInfo.bKeyTaskCreat[TaskNum] = false;
         s_stKeyInfo.KeyPressDownTimes[TaskNum] = 0;
+        s_stKeyInfo.bSticky[TaskNum] = false;
 
         s_stKeyTaskInfo[TaskNum].stKeyAttribute.ShortPressTimes = 0;
         s_stKeyTaskInfo[TaskNum].stKeyAttribute.LongPressTimes = 0;
@@ -172,7 +187,7 @@ Key_Status KeyGetStatusFun(void)
     seconds = time(NULL);
     struct tm * gmt;
     gmt = localtime(&seconds);
-    if(gmt->tm_sec%10 == 0)
+    if(gmt->tm_sec%25 == 0)
     {
 //        printf("%s-%d\n",__func__, __LINE__);
         return Key_Release_Status;
@@ -198,8 +213,8 @@ int main()
     Key_Init();
 
     KeyTask_Info stKeyTaskInfo = {0};
-    stKeyTaskInfo.stKeyAttribute.ShortPressTimes = 2;
-    stKeyTaskInfo.stKeyAttribute.LongPressTimes = 5;
+    stKeyTaskInfo.stKeyAttribute.ShortPressTimes = 5;
+    stKeyTaskInfo.stKeyAttribute.LongPressTimes = 10;
     stKeyTaskInfo.KeyGetStatusFun = KeyGetStatusFun;
     stKeyTaskInfo.KeyHandleFun = KeyHandleFun;
     int TaskNum = Key_CreatTask(&stKeyTaskInfo);

@@ -2,7 +2,7 @@
     From : https://github.com/paiminlin/PM
     From : 
     Author : PaiMin.lin
-    Date : 2022.7.21
+    Date : 2022.7.22
 */
 
 #include <stdio.h>
@@ -19,7 +19,7 @@ extern "C"{
 
 #define KeyTask_MAXNUM           100         /* 支持最多Task数量 */
 
-#define KeyPressDown_MAXTIMES    1000        /*  */
+#define KeyPressDown_MAXTIMES    22          /*  */
 
 typedef enum 
 {
