@@ -67,7 +67,6 @@ int Key_Run(void)
 
                 if(s_stKeyInfo.KeyPressDownTimes[TaskNum] == KeyPressDown_MAXTIMES)
                 {
-                    printf("Sticky\n");
                     s_stKeyInfo.bSticky[TaskNum] = true;
                 }
             }
