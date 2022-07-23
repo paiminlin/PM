@@ -29,7 +29,7 @@ typedef enum
     Hall_Motor_ReverseStall_Move             = 1,    /* 反转直到堵转 用于自学习和自动校准 */
     Hall_Motor_ForwardSoftStop_Move          = 2,    /* 正转直到软停点 常规场景 */
     Hall_Motor_ReverseSoftStop_Move          = 3,    /* 反转直到软停点 常规场景 */
-    Hall_Motor_CUSTOMLOCATION_Move           = 4,    /* 自定义位置 用于迎宾和礼让 */
+    Hall_Motor_Customlocation_Move           = 4,    /* 自定义位置 用于迎宾和礼让 */
     Hall_Motor_Invalid_Move                  = 5,
 }Hall_Motor_Move;
 
@@ -75,7 +75,7 @@ typedef struct Hall_Motor_TaskInfo
     Hall_Motor_StopFun HallMotor_StopFun;           /* 停止回调 */
 } Hall_Motor_TaskInfo;
 
-void Hall_Motor_10MsRun();
+void Hall_Motor_Run();
 
 /*
     霍尔中断触发
@@ -95,15 +95,15 @@ void Hall_Motor_SetMove(Hall_Motor_Location enLocation, Hall_Motor_MoveInfo stHa
 
 Hall_Motor_Move Hall_Motor_GetMove(Hall_Motor_Location enLocation);
 
-void Hall_Motor_GetStatus(Hall_Motor_Location enLocation, Hall_Motor_Info *pstHallMotorInfo);
+int Hall_Motor_GetStatus(Hall_Motor_Location enLocation, Hall_Motor_Info *pstHallMotorInfo);
 
 void Hall_Motor_Init();
 
 void Hall_Motor_DeInit();
 
-void Hall_Motor_CreatTask(Hall_Motor_Location enLocation, Hall_Motor_TaskInfo * pstHallMotorTaskInfo);
+int Hall_Motor_CreatTask(Hall_Motor_Location enLocation, Hall_Motor_TaskInfo * pstHallMotorTaskInfo);
 
-void Hall_Motor_DestroyTask(Hall_Motor_Location enLocation, Hall_Motor_TaskInfo * pstHallMotorTaskInfo);
+int Hall_Motor_DestroyTask(Hall_Motor_Location enLocation, Hall_Motor_TaskInfo * pstHallMotorTaskInfo);
 
 #ifdef __cplusplus
 }
