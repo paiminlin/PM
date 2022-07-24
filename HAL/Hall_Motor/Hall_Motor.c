@@ -142,7 +142,8 @@ void Hall_Motor_Run()
                     }
                 }
 
-                if(s_bUnderStudyByStall[enLocation][Hall_Motor_Forward_Turn] == true
+                if(s_bStudying[enLocation] == false
+                    && s_bUnderStudyByStall[enLocation][Hall_Motor_Forward_Turn] == true
                     && s_bUnderStudyByStall[enLocation][Hall_Motor_Reverse_Turn] == true)
                 {
                     /*
@@ -180,9 +181,9 @@ void Hall_Motor_Run()
                             s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Forward_Turn] = true;
                         }
                         else if(s_stHallMotorInfo[enLocation].enHallMotorMove == Hall_Motor_ForwardSoftStop_Move
-                            && s_stHallMotorInfo[enLocation].position <= (MotorSoftStop_MaxCount + MotorStopDeadBand_Count))
+                            && s_stHallMotorInfo[enLocation].position >= (MotorSoftStop_MaxCount + MotorStopDeadBand_Count))
                         {
-                            s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Forward_Turn] = true;
+                            s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Forward_Turn] = true;
                         }
                         else if(s_stHallMotorInfo[enLocation].enHallMotorMove == Hall_Motor_Customlocation_Move
                             && (abs(s_stHallMotorInfo[enLocation].position - s_stHallMotorInfo[enLocation].Customlocation) >= MotorStopDeadBand_Count))
@@ -208,9 +209,9 @@ void Hall_Motor_Run()
                             s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Reverse_Turn] = true;
                         }
                         else if(s_stHallMotorInfo[enLocation].enHallMotorMove == Hall_Motor_ReverseSoftStop_Move
-                            && s_stHallMotorInfo[enLocation].position >= (s_stHallMotorInfo[enLocation].Motorlength - MotorSoftStop_MaxCount - MotorStopDeadBand_Count))
+                            && s_stHallMotorInfo[enLocation].position <= (s_stHallMotorInfo[enLocation].Motorlength - MotorSoftStop_MaxCount - MotorStopDeadBand_Count))
                         {
-                            s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Reverse_Turn] = true;
+                            s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Reverse_Turn] = true;
                         }
                         else if(s_stHallMotorInfo[enLocation].enHallMotorMove == Hall_Motor_Customlocation_Move
                             && (abs(s_stHallMotorInfo[enLocation].Customlocation - s_stHallMotorInfo[enLocation].position) >= MotorStopDeadBand_Count))
@@ -285,7 +286,6 @@ void Hall_Motor_UpdateCount(Hall_Motor_Location enLocation)
                 && s_stHallMotorInfo[enLocation].Customlocation <= s_stHallMotorInfo[enLocation].position))
         {
             s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Reverse_Turn] = false;
-            s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Reverse_Turn] = false;
             s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Reverse_Turn] = false;
 
             if(s_HallMotor_TurnCount[enLocation] <= 0)
@@ -299,7 +299,6 @@ void Hall_Motor_UpdateCount(Hall_Motor_Location enLocation)
                 && s_stHallMotorInfo[enLocation].Customlocation >= s_stHallMotorInfo[enLocation].position))
         {
             s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Forward_Turn] = false;
-            s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Forward_Turn] = false;
             s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Forward_Turn] = false;
 
             if(s_HallMotor_TurnCount[enLocation] >= s_stHallMotorInfo[enLocation].Motorlength)
@@ -334,8 +333,6 @@ void Hall_Motor_StartStudy(Hall_Motor_Location enLocation)
         s_stHallMotorInfo[enLocation].bStudy = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Forward_Turn] = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Reverse_Turn] = false;
-        s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Forward_Turn] = false;
-        s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Reverse_Turn] = false;
         s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Forward_Turn] = false;
         s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Reverse_Turn] = false;
         s_stHallMotorInfo[enLocation].enHallMotorMove = Hall_Motor_Invalid_Move;
@@ -353,8 +350,6 @@ void Hall_Motor_StopStudy(Hall_Motor_Location enLocation)
         s_bStudying[enLocation] = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Forward_Turn] = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Reverse_Turn] = false;
-        s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Forward_Turn] = false;
-        s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Reverse_Turn] = false;
         s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Forward_Turn] = false;
         s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Reverse_Turn] = false;
         s_stHallMotorInfo[enLocation].enHallMotorMove = Hall_Motor_Invalid_Move;
@@ -367,7 +362,7 @@ void Hall_Motor_StopStudy(Hall_Motor_Location enLocation)
 
 void Hall_Motor_SetMove(Hall_Motor_Location enLocation, Hall_Motor_MoveInfo stHallMotorMoveInfo)
 {
-    Hall_Motor_StopStudy(enLocation);
+//    Hall_Motor_StopStudy(enLocation);
 
     s_stHallMotorInfo[enLocation].enHallMotorMove = stHallMotorMoveInfo.enHallMotorMove;
     s_stHallMotorInfo[enLocation].Customlocation = stHallMotorMoveInfo.Customlocation;
@@ -427,8 +422,6 @@ void Hall_Motor_Init()
         s_stHallMotorInfo[enLocation].bStudy = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Forward_Turn] = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Reverse_Turn] = false;
-        s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Forward_Turn] = false;
-        s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Reverse_Turn] = false;
         s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Forward_Turn] = false;
         s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Reverse_Turn] = false;
         s_stHallMotorInfo[enLocation].enHallMotorMove = Hall_Motor_Invalid_Move;
@@ -460,8 +453,6 @@ void Hall_Motor_DeInit()
         s_stHallMotorInfo[enLocation].bStudy = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Forward_Turn] = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Reverse_Turn] = false;
-        s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Forward_Turn] = false;
-        s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Reverse_Turn] = false;
         s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Forward_Turn] = false;
         s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Reverse_Turn] = false;
         s_stHallMotorInfo[enLocation].enHallMotorMove = Hall_Motor_Invalid_Move;
@@ -496,8 +487,6 @@ int Hall_Motor_CreatTask(Hall_Motor_Location enLocation, Hall_Motor_TaskInfo * p
         s_stHallMotorInfo[enLocation].bStudy = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Forward_Turn] = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Reverse_Turn] = false;
-        s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Forward_Turn] = false;
-        s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Reverse_Turn] = false;
         s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Forward_Turn] = false;
         s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Reverse_Turn] = false;
         s_stHallMotorInfo[enLocation].enHallMotorMove = Hall_Motor_Invalid_Move;
@@ -534,8 +523,6 @@ int Hall_Motor_DestroyTask(Hall_Motor_Location enLocation, Hall_Motor_TaskInfo *
         s_stHallMotorInfo[enLocation].bStudy = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Forward_Turn] = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Reverse_Turn] = false;
-        s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Forward_Turn] = false;
-        s_stHallMotorInfo[enLocation].bSoftStop[Hall_Motor_Reverse_Turn] = false;
         s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Forward_Turn] = false;
         s_stHallMotorInfo[enLocation].bAntiPpinch[Hall_Motor_Reverse_Turn] = false;
         s_stHallMotorInfo[enLocation].enHallMotorMove = Hall_Motor_Invalid_Move;

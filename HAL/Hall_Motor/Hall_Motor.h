@@ -8,13 +8,13 @@
 extern "C"{
 #endif
 
-#define MotorTimeOut_MaxCount                   100 /* 霍尔超时计数 100*10Ms (电机堵转) */
+#define MotorTimeOut_MaxCount                   5   /* 霍尔超时计数 100*10Ms (电机堵转) */
 
-#define MotorSoftStop_MaxCount                  10  /* 软停点 霍尔步数 */
+#define MotorSoftStop_MaxCount                  1   /* 软停点 霍尔步数 */
 
-#define MotorStartDeadBand_Count                10  /* 启动死区 霍尔步数 */
+#define MotorStartDeadBand_Count                1   /* 启动死区 霍尔步数 */
 
-#define MotorStopDeadBand_Count                 10  /* 停止死区 霍尔步数 */
+#define MotorStopDeadBand_Count                 1   /* 停止死区 霍尔步数 */
 
 typedef enum 
 {
@@ -60,7 +60,6 @@ typedef struct Hall_Motor_Info
 {
     bool bStudy;                                    /* 自学习标志位 */
     bool bStall[Hall_Motor_Invalid_Turn];           /* 堵转标志位 */
-    bool bSoftStop[Hall_Motor_Invalid_Turn];        /* 软停点标志位 预留 */
     bool bAntiPpinch[Hall_Motor_Invalid_Turn];      /* 防夹标志位 预留 */
     Hall_Motor_Move enHallMotorMove;                /* 移动方式 */
     int Customlocation;                             /*  */
