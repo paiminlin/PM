@@ -60,6 +60,7 @@ typedef struct Hall_Motor_Info
 {
     bool bStudy;                                    /* 自学习标志位 */
     bool bStall[Hall_Motor_Invalid_Turn];           /* 堵转标志位 */
+    bool bSoftStop[Hall_Motor_Invalid_Turn];        /* 软停点标志位 预留 */
     bool bAntiPpinch[Hall_Motor_Invalid_Turn];      /* 防夹标志位 预留 */
     Hall_Motor_Move enHallMotorMove;                /* 移动方式 */
     int Customlocation;                             /*  */
