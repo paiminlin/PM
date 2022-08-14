@@ -45,9 +45,9 @@ int Alarm_Run(void)
             /*
                 报警阈值 > 恢复阈值;
             */
-            if(s_stAlarmTaskInfo[TaskNum].AlarmSill.Threshold > s_stAlarmTaskInfo[TaskNum].AlarmResume.Threshold)
+            if(s_stAlarmTaskInfo[TaskNum].stAlarmSill.Threshold > s_stAlarmTaskInfo[TaskNum].stAlarmResume.Threshold)
             {
-                if(s_stAlarmTaskInfo[TaskNum].AlarmGetDataFun() >= s_stAlarmTaskInfo[TaskNum].AlarmSill.Threshold)
+                if(s_stAlarmTaskInfo[TaskNum].AlarmGetDataFun() >= s_stAlarmTaskInfo[TaskNum].stAlarmSill.Threshold)
                 {
                     if(s_enLastAlarmMode[TaskNum] != Alarm_Sill_Mode)
                         s_AlarmCounter[TaskNum] = 0;
@@ -56,7 +56,7 @@ int Alarm_Run(void)
                     {
                         s_AlarmCounter[TaskNum] ++;
 
-                        if(s_AlarmCounter[TaskNum] == s_stAlarmTaskInfo[TaskNum].AlarmSill.duration)
+                        if(s_AlarmCounter[TaskNum] == s_stAlarmTaskInfo[TaskNum].stAlarmSill.duration)
                         {
                             s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = true;
                             s_AlarmCounter[TaskNum] = 0;
@@ -68,7 +68,7 @@ int Alarm_Run(void)
 
                     s_enLastAlarmMode[TaskNum] = Alarm_Sill_Mode;
                 }
-                else if(s_stAlarmTaskInfo[TaskNum].AlarmGetDataFun() <= s_stAlarmTaskInfo[TaskNum].AlarmResume.Threshold)
+                else if(s_stAlarmTaskInfo[TaskNum].AlarmGetDataFun() <= s_stAlarmTaskInfo[TaskNum].stAlarmResume.Threshold)
                 {
                     if(s_enLastAlarmMode[TaskNum] != Alarm_Resume_Mode)
                         s_AlarmCounter[TaskNum] = 0;
@@ -77,7 +77,7 @@ int Alarm_Run(void)
                     {
                         s_AlarmCounter[TaskNum] ++;
 
-                        if(s_AlarmCounter[TaskNum] == s_stAlarmTaskInfo[TaskNum].AlarmResume.duration)
+                        if(s_AlarmCounter[TaskNum] == s_stAlarmTaskInfo[TaskNum].stAlarmResume.duration)
                         {
                             s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = false;
                             s_AlarmCounter[TaskNum] = 0;
@@ -94,9 +94,9 @@ int Alarm_Run(void)
             /*
                 报警阈值 < 恢复阈值;
             */
-            if(s_stAlarmTaskInfo[TaskNum].AlarmSill.Threshold < s_stAlarmTaskInfo[TaskNum].AlarmResume.Threshold)
+            if(s_stAlarmTaskInfo[TaskNum].stAlarmSill.Threshold < s_stAlarmTaskInfo[TaskNum].stAlarmResume.Threshold)
             {
-                if(s_stAlarmTaskInfo[TaskNum].AlarmGetDataFun() <= s_stAlarmTaskInfo[TaskNum].AlarmSill.Threshold)
+                if(s_stAlarmTaskInfo[TaskNum].AlarmGetDataFun() <= s_stAlarmTaskInfo[TaskNum].stAlarmSill.Threshold)
                 {
                     if(s_enLastAlarmMode[TaskNum] != Alarm_Sill_Mode)
                         s_AlarmCounter[TaskNum] = 0;
@@ -105,7 +105,7 @@ int Alarm_Run(void)
                     {
                         s_AlarmCounter[TaskNum] ++;
 
-                        if(s_AlarmCounter[TaskNum] == s_stAlarmTaskInfo[TaskNum].AlarmSill.duration)
+                        if(s_AlarmCounter[TaskNum] == s_stAlarmTaskInfo[TaskNum].stAlarmSill.duration)
                         {
                             s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = true;
                             s_AlarmCounter[TaskNum] = 0;
@@ -117,7 +117,7 @@ int Alarm_Run(void)
 
                     s_enLastAlarmMode[TaskNum] = Alarm_Sill_Mode;
                 }
-                else if(s_stAlarmTaskInfo[TaskNum].AlarmGetDataFun() >= s_stAlarmTaskInfo[TaskNum].AlarmResume.Threshold)
+                else if(s_stAlarmTaskInfo[TaskNum].AlarmGetDataFun() >= s_stAlarmTaskInfo[TaskNum].stAlarmResume.Threshold)
                 {
                     if(s_enLastAlarmMode[TaskNum] != Alarm_Resume_Mode)
                         s_AlarmCounter[TaskNum] = 0;
@@ -126,7 +126,7 @@ int Alarm_Run(void)
                     {
                         s_AlarmCounter[TaskNum] ++;
 
-                        if(s_AlarmCounter[TaskNum] == s_stAlarmTaskInfo[TaskNum].AlarmResume.duration)
+                        if(s_AlarmCounter[TaskNum] == s_stAlarmTaskInfo[TaskNum].stAlarmResume.duration)
                         {
                             s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = false;
                             s_AlarmCounter[TaskNum] = 0;
@@ -179,10 +179,10 @@ int Alarm_Init(void)
         s_AlarmCounter[TaskNum] = 0;
         s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = false;
         s_enLastAlarmMode[TaskNum] = Alarm_Invalid_Mode;
-        s_stAlarmTaskInfo[TaskNum].AlarmSill.Threshold = 0;
-        s_stAlarmTaskInfo[TaskNum].AlarmSill.duration = 0;
-        s_stAlarmTaskInfo[TaskNum].AlarmResume.Threshold = 0;
-        s_stAlarmTaskInfo[TaskNum].AlarmResume.duration = 0;
+        s_stAlarmTaskInfo[TaskNum].stAlarmSill.Threshold = 0;
+        s_stAlarmTaskInfo[TaskNum].stAlarmSill.duration = 0;
+        s_stAlarmTaskInfo[TaskNum].stAlarmResume.Threshold = 0;
+        s_stAlarmTaskInfo[TaskNum].stAlarmResume.duration = 0;
         s_stAlarmTaskInfo[TaskNum].AlarmGetDataFun = NULL;
         s_stAlarmTaskInfo[TaskNum].AlarmSillFun = NULL;
         s_stAlarmTaskInfo[TaskNum].AlarmResumeFun = NULL;
@@ -208,10 +208,10 @@ int Alarm_DeInit(void)
         s_AlarmCounter[TaskNum] = 0;
         s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = false;
         s_enLastAlarmMode[TaskNum] = Alarm_Invalid_Mode;
-        s_stAlarmTaskInfo[TaskNum].AlarmSill.Threshold = 0;
-        s_stAlarmTaskInfo[TaskNum].AlarmSill.duration = 0;
-        s_stAlarmTaskInfo[TaskNum].AlarmResume.Threshold = 0;
-        s_stAlarmTaskInfo[TaskNum].AlarmResume.duration = 0;
+        s_stAlarmTaskInfo[TaskNum].stAlarmSill.Threshold = 0;
+        s_stAlarmTaskInfo[TaskNum].stAlarmSill.duration = 0;
+        s_stAlarmTaskInfo[TaskNum].stAlarmResume.Threshold = 0;
+        s_stAlarmTaskInfo[TaskNum].stAlarmResume.duration = 0;
         s_stAlarmTaskInfo[TaskNum].AlarmGetDataFun = NULL;
         s_stAlarmTaskInfo[TaskNum].AlarmSillFun = NULL;
         s_stAlarmTaskInfo[TaskNum].AlarmResumeFun = NULL;
@@ -238,10 +238,10 @@ int Alarm_CreatTask(AlarmTask_Info * pstAlarmTaskInfo)
             s_AlarmCounter[TaskNum] = 0;
             s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = false;
             s_enLastAlarmMode[TaskNum] = Alarm_Invalid_Mode;
-            s_stAlarmTaskInfo[TaskNum].AlarmSill.Threshold = pstAlarmTaskInfo->AlarmSill.Threshold;
-            s_stAlarmTaskInfo[TaskNum].AlarmSill.duration = pstAlarmTaskInfo->AlarmSill.duration;
-            s_stAlarmTaskInfo[TaskNum].AlarmResume.Threshold = pstAlarmTaskInfo->AlarmResume.Threshold;
-            s_stAlarmTaskInfo[TaskNum].AlarmResume.duration = pstAlarmTaskInfo->AlarmResume.duration;
+            s_stAlarmTaskInfo[TaskNum].stAlarmSill.Threshold = pstAlarmTaskInfo->stAlarmSill.Threshold;
+            s_stAlarmTaskInfo[TaskNum].stAlarmSill.duration = pstAlarmTaskInfo->stAlarmSill.duration;
+            s_stAlarmTaskInfo[TaskNum].stAlarmResume.Threshold = pstAlarmTaskInfo->stAlarmResume.Threshold;
+            s_stAlarmTaskInfo[TaskNum].stAlarmResume.duration = pstAlarmTaskInfo->stAlarmResume.duration;
             s_stAlarmTaskInfo[TaskNum].AlarmGetDataFun = pstAlarmTaskInfo->AlarmGetDataFun;
             s_stAlarmTaskInfo[TaskNum].AlarmSillFun = pstAlarmTaskInfo->AlarmSillFun;
             s_stAlarmTaskInfo[TaskNum].AlarmResumeFun = pstAlarmTaskInfo->AlarmResumeFun;
@@ -260,10 +260,10 @@ int Alarm_DestroyTask(int TaskNum, AlarmTask_Info * pstAlarmTaskInfo)
         || pstAlarmTaskInfo == NULL)
         return -1;
 
-    if(s_stAlarmTaskInfo[TaskNum].AlarmSill.Threshold == pstAlarmTaskInfo->AlarmSill.Threshold
-        && s_stAlarmTaskInfo[TaskNum].AlarmSill.duration == pstAlarmTaskInfo->AlarmSill.duration
-        && s_stAlarmTaskInfo[TaskNum].AlarmResume.Threshold == pstAlarmTaskInfo->AlarmResume.Threshold
-        && s_stAlarmTaskInfo[TaskNum].AlarmResume.duration == pstAlarmTaskInfo->AlarmResume.duration
+    if(s_stAlarmTaskInfo[TaskNum].stAlarmSill.Threshold == pstAlarmTaskInfo->stAlarmSill.Threshold
+        && s_stAlarmTaskInfo[TaskNum].stAlarmSill.duration == pstAlarmTaskInfo->stAlarmSill.duration
+        && s_stAlarmTaskInfo[TaskNum].stAlarmResume.Threshold == pstAlarmTaskInfo->stAlarmResume.Threshold
+        && s_stAlarmTaskInfo[TaskNum].stAlarmResume.duration == pstAlarmTaskInfo->stAlarmResume.duration
         && s_stAlarmTaskInfo[TaskNum].AlarmGetDataFun == pstAlarmTaskInfo->AlarmGetDataFun
         && s_stAlarmTaskInfo[TaskNum].AlarmSillFun == pstAlarmTaskInfo->AlarmSillFun
         && s_stAlarmTaskInfo[TaskNum].AlarmResumeFun == pstAlarmTaskInfo->AlarmResumeFun)
@@ -271,10 +271,10 @@ int Alarm_DestroyTask(int TaskNum, AlarmTask_Info * pstAlarmTaskInfo)
         s_AlarmCounter[TaskNum] = 0;
         s_stAlarmInfo.bAlarmTaskStatus[TaskNum] = false;
         s_enLastAlarmMode[TaskNum] = Alarm_Invalid_Mode;
-        s_stAlarmTaskInfo[TaskNum].AlarmSill.Threshold = 0;
-        s_stAlarmTaskInfo[TaskNum].AlarmSill.duration = 0;
-        s_stAlarmTaskInfo[TaskNum].AlarmResume.Threshold = 0;
-        s_stAlarmTaskInfo[TaskNum].AlarmResume.duration = 0;
+        s_stAlarmTaskInfo[TaskNum].stAlarmSill.Threshold = 0;
+        s_stAlarmTaskInfo[TaskNum].stAlarmSill.duration = 0;
+        s_stAlarmTaskInfo[TaskNum].stAlarmResume.Threshold = 0;
+        s_stAlarmTaskInfo[TaskNum].stAlarmResume.duration = 0;
         s_stAlarmTaskInfo[TaskNum].AlarmGetDataFun = NULL;
         s_stAlarmTaskInfo[TaskNum].AlarmSillFun = NULL;
         s_stAlarmTaskInfo[TaskNum].AlarmResumeFun = NULL;
@@ -339,10 +339,10 @@ int main()
         时间秒数大于或等于30时，维持2次(*1s)->回滞
     */
     AlarmTask_Info stAlarmTaskInfo = {0};
-    stAlarmTaskInfo.AlarmSill.Threshold = 10;
-    stAlarmTaskInfo.AlarmSill.duration = 2;
-    stAlarmTaskInfo.AlarmResume.Threshold = 30;
-    stAlarmTaskInfo.AlarmResume.duration = 2;
+    stAlarmTaskInfo.stAlarmSill.Threshold = 10;
+    stAlarmTaskInfo.stAlarmSill.duration = 2;
+    stAlarmTaskInfo.stAlarmResume.Threshold = 30;
+    stAlarmTaskInfo.stAlarmResume.duration = 2;
     stAlarmTaskInfo.AlarmGetDataFun = AlarmGetDataFun;
     stAlarmTaskInfo.AlarmSillFun = AlarmSillFun;
     stAlarmTaskInfo.AlarmResumeFun = AlarmResumeFun;

@@ -33,8 +33,8 @@ typedef int (*AlarmResume_Fun)(void);
 
 typedef struct AlarmTask_Info
 {
-    Alarm_Interval AlarmSill;                   /* 报警阈值/维持时间 */
-    Alarm_Interval AlarmResume;                 /* 回滞阈值/维持时间 */
+    Alarm_Interval stAlarmSill;                 /* 报警阈值/维持时间 */
+    Alarm_Interval stAlarmResume;               /* 回滞阈值/维持时间 */
     AlarmGetData_Fun AlarmGetDataFun;           /* 获取报警对象 返回报警对象数据 */
     AlarmSill_Fun AlarmSillFun;                 /* 触发报警 */
     AlarmResume_Fun AlarmResumeFun;             /* 触发回滞 */
