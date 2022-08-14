@@ -554,6 +554,130 @@ int Hall_Motor_DestroyTask(Hall_Motor_Location enLocation, Hall_Motor_TaskInfo *
     return -1;
 }
 
+//#define Hall_Motor_MAIN_DEBUG
+#ifdef Hall_Motor_MAIN_DEBUG
+
+#include <time.h>
+
+void HallMotor_ForwardFun(void)
+{
+    time_t seconds;
+    seconds = time(NULL);
+    struct tm * gmt;
+    gmt = localtime(&seconds);
+    printf("%s-%d-%dS\n",__func__, __LINE__, gmt->tm_sec);
+}
+
+void HallMotor_ReverseFun(void)
+{
+    time_t seconds;
+    seconds = time(NULL);
+    struct tm * gmt;
+    gmt = localtime(&seconds);
+    printf("%s-%d-%dS\n",__func__, __LINE__, gmt->tm_sec);
+}
+
+void HallMotor_StopFun(void)
+{
+    time_t seconds;
+    seconds = time(NULL);
+    struct tm * gmt;
+    gmt = localtime(&seconds);
+    printf("%s-%d-%dS\n",__func__, __LINE__, gmt->tm_sec);
+}
+
+int main()
+{
+    Hall_Motor_Init();
+
+    Hall_Motor_TaskInfo stHallMotorTaskInfo = {0};
+    stHallMotorTaskInfo.HallMotor_ForwardFun = HallMotor_ForwardFun;
+    stHallMotorTaskInfo.HallMotor_ReverseFun = HallMotor_ReverseFun;
+    stHallMotorTaskInfo.HallMotor_StopFun = HallMotor_StopFun;
+    Hall_Motor_CreatTask(Hall_Motor_MainDriver_Location, &stHallMotorTaskInfo);
+
+    Hall_Motor_StartStudy(Hall_Motor_MainDriver_Location);
+
+    bool bSet1 = false;
+    bool bSet2 = false;
+    bool bSet3 = false;
+    while(1)
+    {
+        Hall_Motor_Info stHallMotorInfo;
+        Hall_Motor_GetStatus(Hall_Motor_MainDriver_Location, &stHallMotorInfo);
+        if(stHallMotorInfo.bStudy == true
+            && bSet1 == false)
+        {
+            bSet1 = true;
+            printf("Study success\n");
+            printf("position = %d\n", stHallMotorInfo.position);
+            printf("Motorlength = %d\n", stHallMotorInfo.Motorlength);
+            Hall_Motor_MoveInfo stHallMotorMoveInfo = {0};
+            stHallMotorMoveInfo.enHallMotorMove = Hall_Motor_ForwardSoftStop_Move;
+            stHallMotorMoveInfo.Customlocation = 0;
+            Hall_Motor_SetMove(Hall_Motor_MainDriver_Location, stHallMotorMoveInfo);
+        }
+
+        if(stHallMotorInfo.bSoftStop[Hall_Motor_Forward_Turn] == true
+            && bSet2 == false)
+        {
+            sleep(5);
+            bSet2 = true;
+            printf("To SoftStop\n");
+            printf("position = %d\n", stHallMotorInfo.position);
+            printf("Motorlength = %d\n", stHallMotorInfo.Motorlength);
+            Hall_Motor_MoveInfo stHallMotorMoveInfo = {0};
+            stHallMotorMoveInfo.enHallMotorMove = Hall_Motor_ReverseStall_Move;
+            stHallMotorMoveInfo.Customlocation = 0;
+            Hall_Motor_SetMove(Hall_Motor_MainDriver_Location, stHallMotorMoveInfo);
+        }
+
+        if(stHallMotorInfo.bStall[Hall_Motor_Reverse_Turn] == true
+            && bSet3 == false)
+        {
+            sleep(5);
+            bSet3 = true;
+            printf("To Stall\n");
+            printf("position = %d\n", stHallMotorInfo.position);
+            printf("Motorlength = %d\n", stHallMotorInfo.Motorlength);
+            Hall_Motor_MoveInfo stHallMotorMoveInfo = {0};
+            stHallMotorMoveInfo.enHallMotorMove = Hall_Motor_Customlocation_Move;
+            stHallMotorMoveInfo.Customlocation = 20;
+            Hall_Motor_SetMove(Hall_Motor_MainDriver_Location, stHallMotorMoveInfo);
+            continue;
+        }
+
+        if(stHallMotorInfo.enHallMotorMove == Hall_Motor_Invalid_Move
+            && bSet1 == true && bSet2 == true && bSet3 == true)
+        {
+            printf("To specified location\n");
+            printf("position = %d\n", stHallMotorInfo.position);
+            printf("Motorlength = %d\n", stHallMotorInfo.Motorlength);
+            break;
+        }
+
+        Hall_Motor_Run();
+
+        time_t seconds;
+        seconds = time(NULL);
+        struct tm * gmt;
+        gmt = localtime(&seconds);
+        if((gmt->tm_sec >= 0 && gmt->tm_sec < 25)
+            || (gmt->tm_sec >= 30 && gmt->tm_sec < 55))
+        {
+            Hall_Motor_UpdateCount(Hall_Motor_MainDriver_Location);
+        }
+        sleep(1);
+    }
+
+    Hall_Motor_DestroyTask(Hall_Motor_MainDriver_Location, &stHallMotorTaskInfo);
+
+    Hall_Motor_DeInit();
+
+    return 0;
+}
+#endif
+
 #ifdef __cplusplus
 }
 #endif
