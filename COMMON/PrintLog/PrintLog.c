@@ -36,19 +36,44 @@ extern "C"{
 #define CLEAR           "\e[2J"
 #define CLRLINE         "\r\e[K" //or "\e[1K\r"
 
-void PrintLog_Init(void)
+static PrintLog_Level s_enPrintLogLevel = PrintLog_InvalidLevel;
+
+void PrintLog_Init(PrintLog_Level enPrintLogLevel)
 {
+    s_enPrintLogLevel = enPrintLogLevel;
     return ;
 }
 
 void PrintLog_DeInit(void)
 {
+    s_enPrintLogLevel = PrintLog_InvalidLevel;
     return ;
 }
 
-void PrintLog(void)
+void PrintLog_Bebug(void)
 {
-    printf("[%s %s] %s: %s: %d :\n", __DATE__, __TIME__, __FILE__, __func__, __LINE__);
+    if(s_enPrintLogLevel <= PrintLog_BebugLevel)
+    {
+        printf("[%s %s] %s: %s: %d :\n", __DATE__, __TIME__, __FILE__, __func__, __LINE__);
+    }
+    return ;
+}
+
+void PrintLog_Warn(void)
+{
+    if(s_enPrintLogLevel <= PrintLog_WarnLevel)
+    {
+        printf("[%s %s] %s: %s: %d :\n", __DATE__, __TIME__, __FILE__, __func__, __LINE__);
+    }
+    return ;
+}
+
+void PrintLog_Error(void)
+{
+    if(s_enPrintLogLevel <= PrintLog_ErrorLevel)
+    {
+        printf("[%s %s] %s: %s: %d :\n", __DATE__, __TIME__, __FILE__, __func__, __LINE__);
+    }
     return ;
 }
 
@@ -57,7 +82,11 @@ void PrintLog(void)
 
 int main()
 {
-    PrintLog();
+    PrintLog_Init(PrintLog_BebugLevel);
+    PrintLog_Bebug();
+    PrintLog_Warn();
+    PrintLog_Error();
+    PrintLog_DeInit();
     return 0;
 }
 #endif
