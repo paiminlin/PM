@@ -1,8 +1,5 @@
 /*
-list_tip.h
-linux-4.9.37内核版本 内核链表接口介绍
-源代码路径 linux-4.9.37\include\linux\list.h
-
+linux-4.9.37\include\linux\list.h
 */
 
 /*
