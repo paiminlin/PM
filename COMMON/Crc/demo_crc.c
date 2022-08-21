@@ -1,10 +1,8 @@
 /*
-demo_crc.c
-crc demo : CRC 校验
-
-引用 crcLib.h crcLib.c
-github 地址 : https://github.com/whik/crc-lib-c
-
+    From : https://github.com/paiminlin/PM
+    From : https://blog.csdn.net/lpaim/article/details/125467345
+    Author : PaiMin.lin
+    Date : 2022.8.21
 */
 
 #include <stdio.h>
