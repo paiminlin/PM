@@ -16,8 +16,8 @@
 extern "C"{
 #endif
 
-//#define DemoCrc_MAIN_DEBUG
-#ifdef DemoCrc_MAIN_DEBUG
+//#define Democrc_MAIN_DEBUG
+#ifdef Democrc_MAIN_DEBUG
 
 int main() {
 
