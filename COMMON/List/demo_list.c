@@ -17,8 +17,8 @@
 extern "C"{
 #endif
 
-//#define DemoList_MAIN_DEBUG
-#ifdef DemoList_MAIN_DEBUG
+//#define Demolist_MAIN_DEBUG
+#ifdef Demolist_MAIN_DEBUG
 
 #define MAX_BUF         64
 
