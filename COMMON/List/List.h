@@ -7,8 +7,7 @@ list.h
 
 #ifdef LPM
 
-#include <stdio.h>
-#include <stdbool.h>
+#include <stddef.h>
 
 #define READ_ONCE(list)             list
 
