@@ -17,9 +17,9 @@ extern "C"{
 #ifndef HAL_KEY_H_
 #define HAL_KEY_H_
 
-#define HAL_KEYTASK_MAXNUM          100    /* 支持最多Task数量 */
+#define HAL_KEYTASK_MAXNUM          100     /* 支持最多Task数量 */
 
-#define HAL_KEYPRESS_MAXTIMES       50     /* 按键粘滞时长 * Hal_Key_Run */
+#define HAL_KEYPRESS_MAXTIMES       50      /* 判断按键粘滞时间 * Hal_Key_Run */
 
 typedef enum 
 {
@@ -41,8 +41,8 @@ typedef int (*Hal_KeyHandle_Fun)(Hal_Key_PressStatus enHalKeyPressStatus);
 
 typedef struct Hal_Key_Attribute
 {
-    int ShortPressTimes;                    /* 短按维持时间 * Hal_KeyRun */
-    int LongPressTimes;                     /* 长按维持时间 * Hal_KeyRun */
+    int ShortPressTimes;                    /* 短按维持时间 * Hal_Key_Run */
+    int LongPressTimes;                     /* 长按维持时间 * Hal_Key_Run */
 } Hal_Key_Attribute;
 
 typedef struct Hal_KeyTask_Info
