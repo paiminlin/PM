@@ -75,7 +75,7 @@ int Hal_Key_Run(void)
     return 0;
 }
 
-int Key_Init(void)
+int Hal_Key_Init(void)
 {
     if(s_stHalKeyInfo.bKeyInit == true)
         return 0;
@@ -97,7 +97,7 @@ int Key_Init(void)
     return 0;
 }
 
-int Key_DeInit(void)
+int Hal_Key_DeInit(void)
 {
     if(s_stHalKeyInfo.bKeyInit == false)
         return 0;
@@ -119,7 +119,7 @@ int Key_DeInit(void)
     return 0;
 }
 
-int Key_CreatTask(Hal_KeyTask_Info * pstKeyTaskInfo)
+int Hal_Key_CreatTask(Hal_KeyTask_Info * pstKeyTaskInfo)
 {
     if(s_stHalKeyInfo.bKeyInit == false)
         return -1;
@@ -147,7 +147,7 @@ int Key_CreatTask(Hal_KeyTask_Info * pstKeyTaskInfo)
     return -1;
 }
 
-int Key_DestroyTask(int TaskNum, Hal_KeyTask_Info * pstKeyTaskInfo)
+int Hal_Key_DestroyTask(int TaskNum, Hal_KeyTask_Info * pstKeyTaskInfo)
 {
     if(s_stHalKeyInfo.bKeyInit == false)
         return -1;
