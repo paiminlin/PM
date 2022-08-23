@@ -211,7 +211,7 @@ int Hal_Led_DestroyTask(int TaskNum, Hal_LedTask_Info * pstHalLedTaskInfo)
         return -1;
 
     if(s_stHalLedTaskInfo[TaskNum].enInitHalLedStatus == pstHalLedTaskInfo->enInitHalLedStatus
-        && s_stHalLedTaskInfo[TaskNum].enInitHalLedStatus == pstHalLedTaskInfo->enInitHalLedStatus)
+        && s_stHalLedTaskInfo[TaskNum].HalLedControlFun == pstHalLedTaskInfo->HalLedControlFun)
     {
         s_bUpdateLedTaskFlashFlage[TaskNum] = false;
         s_stUpdateLedTaskFlashInfo[TaskNum].RepeatTimes = 0;
