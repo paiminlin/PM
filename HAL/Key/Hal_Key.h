@@ -1,6 +1,6 @@
 /*
     From : https://github.com/paiminlin/PM
-    From : 
+    From : https://blog.csdn.net/lpaim/article/details/126498161
     Author : PaiMin.lin
     Date : 2022.8.23
 */
@@ -19,8 +19,6 @@ extern "C"{
 
 #define HAL_KEYTASK_MAXNUM          100     /* 支持最多Task数量 */
 
-#define HAL_KEYPRESS_MAXTIMES       50      /* 判断按键粘滞时间 * Hal_Key_Run */
-
 typedef enum 
 {
     HAL_KEY_PRESS_STATUS            = 0,    /* 按键按下或松开的状态 */
@@ -30,9 +28,10 @@ typedef enum
 
 typedef enum 
 {
-    HAL_KEY_SHORTPRESS_STATUS       = 0,    /* 按键短按或长按的状态 */
+    HAL_KEY_SHORTPRESS_STATUS       = 0,    /* 按键短按或长按或抬起的状态 */
     HAL_KEY_LONGPRESS_STATUS        = 1,
-    HAL_KEY_INVALIDPRESS_STATUS     = 2,
+    HAL_KEY_RELEASEPRESS_STATUS     = 2,
+    HAL_KEY_INVALIDPRESS_STATUS     = 3,
 }Hal_Key_PressStatus;
 
 typedef Hal_Key_Status (*Hal_KeyGetStatus_Fun)(void);
@@ -49,7 +48,7 @@ typedef struct Hal_KeyTask_Info
 {
     Hal_Key_Attribute stHalKeyAttribute;    /* 按键短按和长按的属性 */
     Hal_KeyGetStatus_Fun HalKeyGetStatusFun;/* 获取按键按下或松开的状态 */
-    Hal_KeyHandle_Fun HalKeyHandleFun;      /* 触发按键短按或长按的行为 */
+    Hal_KeyHandle_Fun HalKeyHandleFun;      /* 触发按键短按或长按或抬起的行为 */
 } Hal_KeyTask_Info;
 
 int Hal_Key_Run(void);

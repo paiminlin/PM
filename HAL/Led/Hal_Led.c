@@ -37,12 +37,12 @@ int Hal_Led_Run(void)
         if(s_stHalLedInfo.enLedTaskMode[TaskNum] == HAL_LED_BRIGHT_MODE)
         {
             if(s_stHalLedTaskInfo[TaskNum].HalLedControlFun != NULL)
-                s_stHalLedTaskInfo[TaskNum].HalLedControlFun(HAL_LED_BRIGHT_MODE);
+                s_stHalLedTaskInfo[TaskNum].HalLedControlFun(HAL_LED_BRIGHT_STATUS);
         }
         else if(s_stHalLedInfo.enLedTaskMode[TaskNum] == HAL_LED_DARK_MODE)
         {
             if(s_stHalLedTaskInfo[TaskNum].HalLedControlFun != NULL)
-                s_stHalLedTaskInfo[TaskNum].HalLedControlFun(HAL_LED_DARK_MODE);
+                s_stHalLedTaskInfo[TaskNum].HalLedControlFun(HAL_LED_DARK_STATUS);
         }
         else if(s_stHalLedInfo.enLedTaskMode[TaskNum] == HAL_LED_LIMITEDFLASH_MODE)
         {
@@ -59,13 +59,13 @@ int Hal_Led_Run(void)
                 if(s_stUpdateLedTaskFlashInfo[TaskNum].BrightTimes > 0)
                 {
                     if(s_stHalLedTaskInfo[TaskNum].HalLedControlFun != NULL)
-                        s_stHalLedTaskInfo[TaskNum].HalLedControlFun(HAL_LED_BRIGHT_MODE);
+                        s_stHalLedTaskInfo[TaskNum].HalLedControlFun(HAL_LED_BRIGHT_STATUS);
                     s_stUpdateLedTaskFlashInfo[TaskNum].BrightTimes --;
                 }
                 else if(s_stUpdateLedTaskFlashInfo[TaskNum].DarkTimes > 0)
                 {
                     if(s_stHalLedTaskInfo[TaskNum].HalLedControlFun != NULL)
-                        s_stHalLedTaskInfo[TaskNum].HalLedControlFun(HAL_LED_DARK_MODE);
+                        s_stHalLedTaskInfo[TaskNum].HalLedControlFun(HAL_LED_DARK_STATUS);
                     s_stUpdateLedTaskFlashInfo[TaskNum].DarkTimes --;
                 }
 
@@ -95,13 +95,13 @@ int Hal_Led_Run(void)
             if(s_stUpdateLedTaskFlashInfo[TaskNum].BrightTimes > 0)
             {
                 if(s_stHalLedTaskInfo[TaskNum].HalLedControlFun != NULL)
-                    s_stHalLedTaskInfo[TaskNum].HalLedControlFun(HAL_LED_BRIGHT_MODE);
+                    s_stHalLedTaskInfo[TaskNum].HalLedControlFun(HAL_LED_BRIGHT_STATUS);
                 s_stUpdateLedTaskFlashInfo[TaskNum].BrightTimes --;
             }
             else if(s_stUpdateLedTaskFlashInfo[TaskNum].DarkTimes > 0)
             {
                 if(s_stHalLedTaskInfo[TaskNum].HalLedControlFun != NULL)
-                    s_stHalLedTaskInfo[TaskNum].HalLedControlFun(HAL_LED_DARK_MODE);
+                    s_stHalLedTaskInfo[TaskNum].HalLedControlFun(HAL_LED_DARK_STATUS);
                 s_stUpdateLedTaskFlashInfo[TaskNum].DarkTimes --;
             }
 

@@ -1,6 +1,6 @@
 /*
     From : https://github.com/paiminlin/PM
-    From : 
+    From : https://blog.csdn.net/lpaim/article/details/126498161
     Author : PaiMin.lin
     Date : 2022.8.23
 */
@@ -16,7 +16,6 @@ typedef struct Hal_Key_Info
     bool bKeyInit;
     bool bKeyTaskCreat[HAL_KEYTASK_MAXNUM];
     int KeyPressDownTimes[HAL_KEYTASK_MAXNUM];
-    bool bSticky[HAL_KEYTASK_MAXNUM];
 } Hal_Key_Info;
 
 static Hal_Key_Info s_stHalKeyInfo = {0};
@@ -36,19 +35,12 @@ int Hal_Key_Run(void)
             if(s_stHalKeyTaskInfo[TaskNum].HalKeyGetStatusFun != NULL)
             {
                 enKeyStatus = s_stHalKeyTaskInfo[TaskNum].HalKeyGetStatusFun();
-                if(enKeyStatus == HAL_KEY_PRESS_STATUS
-                    && s_stHalKeyInfo.bSticky[TaskNum] == false)
+                if(enKeyStatus == HAL_KEY_PRESS_STATUS)
                 {
                     s_stHalKeyInfo.KeyPressDownTimes[TaskNum] ++;
                 }
-                else if(enKeyStatus == HAL_KEY_RELEASE_STATUS)
-                {
-                    s_stHalKeyInfo.KeyPressDownTimes[TaskNum] = 0;
-                    s_stHalKeyInfo.bSticky[TaskNum] = false;
-                }
 
-                if(s_stHalKeyInfo.KeyPressDownTimes[TaskNum] == s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.ShortPressTimes
-                    && s_stHalKeyInfo.bSticky[TaskNum] == false)
+                if(s_stHalKeyInfo.KeyPressDownTimes[TaskNum] == s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.ShortPressTimes)
                 {
                     if(s_stHalKeyTaskInfo[TaskNum].HalKeyHandleFun != NULL)
                     {
@@ -56,18 +48,24 @@ int Hal_Key_Run(void)
                     }
                 }
                 else if(s_stHalKeyInfo.KeyPressDownTimes[TaskNum] >= s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.LongPressTimes
-                    && s_stHalKeyInfo.KeyPressDownTimes[TaskNum]%s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.LongPressTimes == 0
-                    && s_stHalKeyInfo.bSticky[TaskNum] == false)
+                    && s_stHalKeyInfo.KeyPressDownTimes[TaskNum]%s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.LongPressTimes == 0)
                 {
                     if(s_stHalKeyTaskInfo[TaskNum].HalKeyHandleFun != NULL)
                     {
                         s_stHalKeyTaskInfo[TaskNum].HalKeyHandleFun(HAL_KEY_LONGPRESS_STATUS);
                     }
                 }
-
-                if(s_stHalKeyInfo.KeyPressDownTimes[TaskNum] >= HAL_KEYPRESS_MAXTIMES)
+ 
+                if(enKeyStatus == HAL_KEY_RELEASE_STATUS)
                 {
-                    s_stHalKeyInfo.bSticky[TaskNum] = true;
+                    if(s_stHalKeyInfo.KeyPressDownTimes[TaskNum] >= s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.ShortPressTimes)
+                    {
+                        if(s_stHalKeyTaskInfo[TaskNum].HalKeyHandleFun != NULL)
+                        {
+                            s_stHalKeyTaskInfo[TaskNum].HalKeyHandleFun(HAL_KEY_RELEASEPRESS_STATUS);
+                        }
+                    }
+                    s_stHalKeyInfo.KeyPressDownTimes[TaskNum] = 0;
                 }
             }
         }
@@ -87,7 +85,6 @@ int Hal_Key_Init(void)
     {
         s_stHalKeyInfo.bKeyTaskCreat[TaskNum] = false;
         s_stHalKeyInfo.KeyPressDownTimes[TaskNum] = 0;
-        s_stHalKeyInfo.bSticky[TaskNum] = false;
 
         s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.ShortPressTimes = 0;
         s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.LongPressTimes = 0;
@@ -109,7 +106,6 @@ int Hal_Key_DeInit(void)
     {
         s_stHalKeyInfo.bKeyTaskCreat[TaskNum] = false;
         s_stHalKeyInfo.KeyPressDownTimes[TaskNum] = 0;
-        s_stHalKeyInfo.bSticky[TaskNum] = false;
 
         s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.ShortPressTimes = 0;
         s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.LongPressTimes = 0;
@@ -135,7 +131,6 @@ int Hal_Key_CreatTask(Hal_KeyTask_Info * pstHalKeyTaskInfo)
         {
             s_stHalKeyInfo.bKeyTaskCreat[TaskNum] = true;
             s_stHalKeyInfo.KeyPressDownTimes[TaskNum] = 0;
-            s_stHalKeyInfo.bSticky[TaskNum] = false;
 
             s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.ShortPressTimes = pstHalKeyTaskInfo->stHalKeyAttribute.ShortPressTimes;
             s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.LongPressTimes = pstHalKeyTaskInfo->stHalKeyAttribute.LongPressTimes;
@@ -163,7 +158,6 @@ int Hal_Key_DestroyTask(int TaskNum, Hal_KeyTask_Info * pstHalKeyTaskInfo)
     {
         s_stHalKeyInfo.bKeyTaskCreat[TaskNum] = false;
         s_stHalKeyInfo.KeyPressDownTimes[TaskNum] = 0;
-        s_stHalKeyInfo.bSticky[TaskNum] = false;
 
         s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.ShortPressTimes = 0;
         s_stHalKeyTaskInfo[TaskNum].stHalKeyAttribute.LongPressTimes = 0;
