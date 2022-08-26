@@ -12,7 +12,7 @@ CXXINCS  = -I"E:/Dev-Cpp/TDM-GCC-64/include" -I"E:/Dev-Cpp/TDM-GCC-64/x86_64-w64
 BIN      = PM.exe
 CXXFLAGS = $(CXXINCS) -Wall -Wextra -Wfatal-errors -pg
 CFLAGS   = $(INCS) -Wall -Wextra -Wfatal-errors -pg
-DEL      = E:\Dev-Cpp\devcpp.exe INTERNAL_DEL
+DEL      = E:\Dev-Cpp\DevCpp.exe INTERNAL_DEL
 
 .PHONY: all all-before all-after clean clean-custom
 
