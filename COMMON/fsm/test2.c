@@ -35,12 +35,27 @@ static void *ToOFF(void *p)
     printf("%s-%d\n",__func__, __LINE__);
     return NULL;
 }
+static void *InOFF(void *p)
+{
+    printf("%s-%d\n",__func__, __LINE__);
+    return NULL;
+}
 static void *ToACC(void *p)
 {
     printf("%s-%d\n",__func__, __LINE__);
     return NULL;
 }
+static void *InACC(void *p)
+{
+    printf("%s-%d\n",__func__, __LINE__);
+    return NULL;
+}
 static void *ToON(void *p)
+{
+    printf("%s-%d\n",__func__, __LINE__);
+    return NULL;
+}
+static void *InON(void *p)
 {
     printf("%s-%d\n",__func__, __LINE__);
     return NULL;
@@ -55,24 +70,27 @@ static void *ToStop(void *p)
 int main()
 {
     struct para func_para;
-    struct fsm_branch branch[][2] = {
+    struct fsm_branch branch[][3] = {
         /* OFF */
         {
             /* SSB */
-            {SSB, ACC, ToACC,},
-            {STOP, OFF, ToStop,},
+            {SSB, ACC, ToACC, NULL},
+            {STOP, OFF, ToStop, NULL},
+            {INVALID, OFF, InOFF, NULL},
         },
         /* ACC */
         {
             /* SSB */
-            {SSB, ON, ToON,},
-            {STOP, ACC, NULL,},
+            {SSB, ON, ToON, NULL},
+            {STOP, ACC, NULL, NULL},
+            {INVALID, ACC, InACC, NULL},
         },
         /* ON */
         {
             /* SSB */
-            {SSB, OFF, ToOFF,},
-            {STOP, ON, NULL,},
+            {SSB, OFF, ToOFF, NULL},
+            {STOP, ON, NULL, NULL},
+            {INVALID, ON, InON, NULL},
         },
     };
     struct fsm_state fsm_state[] = {
