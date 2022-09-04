@@ -4,8 +4,8 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = COMMON/Alarm/Alarm.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o OS/OS.o main.o HAL/Hall_Motor/Hall_Motor.o COMMON/Cjson/cJSON.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/dictionary.o COMMON/Ini/iniparser.o COMMON/Crc/demo_crc.o COMMON/Param/Param.o COMMON/PrintLog/PrintLog.o COMMON/List/demo_list.o COMMON/ini/demo_ini.o COMMON/cjson/demo_cjson.o HAL/Key/Hal_Key.o HAL/Led/Hal_Led.o HAL/Led/demo.o COMMON/fsm/fsm.o COMMON/fsm/test.o COMMON/fsm/fob.o COMMON/fsm/ign.o
-LINKOBJ  = COMMON/Alarm/Alarm.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o OS/OS.o main.o HAL/Hall_Motor/Hall_Motor.o COMMON/Cjson/cJSON.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/dictionary.o COMMON/Ini/iniparser.o COMMON/Crc/demo_crc.o COMMON/Param/Param.o COMMON/PrintLog/PrintLog.o COMMON/List/demo_list.o COMMON/ini/demo_ini.o COMMON/cjson/demo_cjson.o HAL/Key/Hal_Key.o HAL/Led/Hal_Led.o HAL/Led/demo.o COMMON/fsm/fsm.o COMMON/fsm/test.o COMMON/fsm/fob.o COMMON/fsm/ign.o
+OBJ      = COMMON/Alarm/Alarm.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o OS/OS.o main.o HAL/Hall_Motor/Hall_Motor.o COMMON/Cjson/cJSON.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/dictionary.o COMMON/Ini/iniparser.o COMMON/Crc/demo_crc.o COMMON/Param/Param.o COMMON/PrintLog/PrintLog.o COMMON/List/demo_list.o COMMON/ini/demo_ini.o COMMON/cjson/demo_cjson.o HAL/Key/Hal_Key.o HAL/Led/Hal_Led.o HAL/Led/demo.o COMMON/fsm/fsm.o COMMON/fsm/fob.o COMMON/fsm/ign.o
+LINKOBJ  = COMMON/Alarm/Alarm.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o OS/OS.o main.o HAL/Hall_Motor/Hall_Motor.o COMMON/Cjson/cJSON.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/dictionary.o COMMON/Ini/iniparser.o COMMON/Crc/demo_crc.o COMMON/Param/Param.o COMMON/PrintLog/PrintLog.o COMMON/List/demo_list.o COMMON/ini/demo_ini.o COMMON/cjson/demo_cjson.o HAL/Key/Hal_Key.o HAL/Led/Hal_Led.o HAL/Led/demo.o COMMON/fsm/fsm.o COMMON/fsm/fob.o COMMON/fsm/ign.o
 LIBS     = -L"E:/Dev-Cpp/TDM-GCC-64/lib" -L"E:/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib" -static-libgcc -pg
 INCS     = -I"E:/Dev-Cpp/TDM-GCC-64/include" -I"E:/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"E:/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
 CXXINCS  = -I"E:/Dev-Cpp/TDM-GCC-64/include" -I"E:/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"E:/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"E:/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
@@ -83,9 +83,6 @@ HAL/Led/demo.o: HAL/Led/demo.c
 
 COMMON/fsm/fsm.o: COMMON/fsm/fsm.c
 	$(CC) -c COMMON/fsm/fsm.c -o COMMON/fsm/fsm.o $(CFLAGS)
-
-COMMON/fsm/test.o: COMMON/fsm/test.c
-	$(CC) -c COMMON/fsm/test.c -o COMMON/fsm/test.o $(CFLAGS)
 
 COMMON/fsm/fob.o: COMMON/fsm/fob.c
 	$(CC) -c COMMON/fsm/fob.c -o COMMON/fsm/fob.o $(CFLAGS)

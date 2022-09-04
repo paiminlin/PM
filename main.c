@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#if 0
+#if 1
 int main()
 {
     return 0;
