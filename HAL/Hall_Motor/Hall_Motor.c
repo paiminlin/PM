@@ -578,6 +578,9 @@ int Hall_Motor_DestroyTask(Hall_Motor_Location enLocation, Hall_Motor_TaskInfo *
 
 #include <time.h>
 
+//#define Hall_Motor_AUTOSTUDY_DEBUG
+#define Hall_Motor_MANUALSTUDY_DEBUG
+
 void HallMotor_ForwardFun(void)
 {
     time_t seconds;
@@ -615,15 +618,20 @@ int main()
     stHallMotorTaskInfo.HallMotor_StopFun = HallMotor_StopFun;
     Hall_Motor_CreatTask(Hall_Motor_MainDriver_Location, &stHallMotorTaskInfo);
 
+#ifdef Hall_Motor_AUTOSTUDY_DEBUG
     Hall_Motor_StartStudy(Hall_Motor_MainDriver_Location);
+#endif
 
-    bool bSet1 = false;
-    bool bSet2 = false;
-    bool bSet3 = false;
     while(1)
     {
+        static bool bSet1 = false;
+        static bool bSet2 = false;
+        static bool bSet3 = false;
+
         Hall_Motor_Info stHallMotorInfo;
         Hall_Motor_GetStatus(Hall_Motor_MainDriver_Location, &stHallMotorInfo);
+
+#ifdef Hall_Motor_AUTOSTUDY_DEBUG
         if(stHallMotorInfo.bStudy == true
             && bSet1 == false)
         {
@@ -674,6 +682,45 @@ int main()
             printf("Motorlength = %d\n", stHallMotorInfo.Motorlength);
             break;
         }
+#endif
+
+#ifdef Hall_Motor_MANUALSTUDY_DEBUG
+        if(bSet1 == false)
+        {
+            printf("To Hall_Motor_ReverseStall_Move\n");
+            printf("position = %d\n", stHallMotorInfo.position);
+            printf("Motorlength = %d\n", stHallMotorInfo.Motorlength);
+            bSet1 = true;
+            Hall_Motor_MoveInfo stHallMotorMoveInfo = {0};
+            stHallMotorMoveInfo.enHallMotorMove = Hall_Motor_ReverseStall_Move;
+            stHallMotorMoveInfo.Customlocation = 0;
+            Hall_Motor_SetMove(Hall_Motor_MainDriver_Location, stHallMotorMoveInfo);
+        }
+        else if(bSet1 == true 
+            && bSet2 == false 
+            && stHallMotorInfo.bStall[Hall_Motor_Reverse_Turn] == true)
+        {
+            sleep(8);
+            printf("To Hall_Motor_ForwardStall_Move\n");
+            printf("position = %d\n", stHallMotorInfo.position);
+            printf("Motorlength = %d\n", stHallMotorInfo.Motorlength);
+            bSet2 = true;
+            Hall_Motor_MoveInfo stHallMotorMoveInfo = {0};
+            stHallMotorMoveInfo.enHallMotorMove = Hall_Motor_ForwardStall_Move;
+            stHallMotorMoveInfo.Customlocation = 0;
+            Hall_Motor_SetMove(Hall_Motor_MainDriver_Location, stHallMotorMoveInfo);
+        }
+
+        if(bSet1 == true 
+            && bSet2 == true 
+            && stHallMotorInfo.bStudy == true)
+        {
+            printf("Study success\n");
+            printf("position = %d\n", stHallMotorInfo.position);
+            printf("Motorlength = %d\n", stHallMotorInfo.Motorlength);
+            break;
+        }
+#endif
 
         Hall_Motor_Run();
 

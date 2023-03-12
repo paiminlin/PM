@@ -23,15 +23,36 @@ static Hal_WiperCtrTask_Info s_stHalWiperCtrTaskInfo[HAL_WIPERCTRTASK_MAXNUM] = 
 
 static Hal_WiperCtrTask_Info s_stUpdateHalWiperCtrTaskInfo[HAL_WIPERCTRTASK_MAXNUM] = {0};
 
-static void WiperCtr_ClearInfo(int TaskNum)
+static void WiperCtr_ClearUpdateInfo(int TaskNum, Hal_WiperCtr_Mode enHalWiperCtrMode)
 {
-    s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrOffInfo.KeepResetTimes = 0;
-//    s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrAutoInfo = ;
-    s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW1RepeatTimes = 0;
-    s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.OFFTimes = 0;
-    s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW2RepeatTimes = 0;
-    s_stUpdateHalWiperCtrTaskInfo[TaskNum].HalWiperCtrResetFun = NULL;
-    s_stUpdateHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun = NULL;
+    if(enHalWiperCtrMode != HAL_WIPERCTR_OFF_MODE)
+    {
+        s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrOffInfo.KeepResetTimes = 0;
+    }
+    if(enHalWiperCtrMode != HAL_WIPERCTR_LOW_MODE)
+    {
+        ;
+    }
+    if(enHalWiperCtrMode != HAL_WIPERCTR_HIGH_MODE)
+    {
+        ;
+    }
+    if(enHalWiperCtrMode != HAL_WIPERCTR_AUTO_MODE)
+    {
+//        s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrAutoInfo = ;
+    }
+    if(enHalWiperCtrMode != HAL_WIPERCTR_WASH_MODE)
+    {
+        s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW1RepeatTimes = 0;
+        s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.OFFTimes = 0;
+        s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW2RepeatTimes = 0;
+    }
+
+    if(enHalWiperCtrMode == HAL_WIPERCTR_INVALID_MODE)
+    {
+        s_stUpdateHalWiperCtrTaskInfo[TaskNum].HalWiperCtrResetFun = NULL;
+        s_stUpdateHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun = NULL;
+    }
 
     return;
 }
@@ -47,6 +68,8 @@ int Hal_WiperCtr_Run(void)
     {
         if(s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] == HAL_WIPERCTR_OFF_MODE)
         {
+            WiperCtr_ClearUpdateInfo(TaskNum, HAL_WIPERCTR_OFF_MODE);
+
             if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrResetFun != NULL)
             {
                 if(s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrOffInfo.KeepResetTimes < s_stHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrOffInfo.KeepResetTimes)
@@ -63,50 +86,64 @@ int Hal_WiperCtr_Run(void)
         }
         else if(s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] == HAL_WIPERCTR_LOW_MODE)
         {
-            WiperCtr_ClearInfo(TaskNum);
+            WiperCtr_ClearUpdateInfo(TaskNum, HAL_WIPERCTR_LOW_MODE);
 
             if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun != NULL)
                 s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun(HAL_WIPERCTR_LOW_MODE);
         }
         else if(s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] == HAL_WIPERCTR_HIGH_MODE)
         {
-            WiperCtr_ClearInfo(TaskNum);
+            WiperCtr_ClearUpdateInfo(TaskNum, HAL_WIPERCTR_LOW_MODE);
 
             if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun != NULL)
                 s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun(HAL_WIPERCTR_HIGH_MODE);
         }
         else if(s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] == HAL_WIPERCTR_AUTO_MODE)
         {
+            WiperCtr_ClearUpdateInfo(TaskNum, HAL_WIPERCTR_AUTO_MODE);
         }
         else if(s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] == HAL_WIPERCTR_WASH_MODE)
         {
+            WiperCtr_ClearUpdateInfo(TaskNum, HAL_WIPERCTR_WASH_MODE);
+
             if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrResetFun != NULL)
             {
                 if(s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW1RepeatTimes < s_stHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW1RepeatTimes)
                 {
-                    if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrResetFun() == true)
+                    if(s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW1RepeatTimes == 0)
+                    {
+                        if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun != NULL)
+                            s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun(HAL_WIPERCTR_LOW_MODE);
+                    }
+                    else if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrResetFun() == true)
+                    {
                         s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW1RepeatTimes ++;
-                    else{
-                            if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun != NULL)
-                                s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun(HAL_WIPERCTR_LOW_MODE);
                     }
                 }
                 else if(s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW1RepeatTimes == s_stHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW1RepeatTimes
                     && s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.OFFTimes < s_stHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.OFFTimes)
                 {
-                    if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun != NULL)
-                        s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun(HAL_WIPERCTR_OFF_MODE);
-
-                    s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.OFFTimes ++;
+                    if(s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.OFFTimes == 0)
+                    {
+                        if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun != NULL)
+                            s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun(HAL_WIPERCTR_OFF_MODE);
+                    }
+                    else
+                    {
+                        s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.OFFTimes ++;
+                    }
                 }
                 else if(s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.OFFTimes == s_stHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.OFFTimes
                     && s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW2RepeatTimes < s_stHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW2RepeatTimes)
                 {
-                    if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrResetFun() == true)
+                    if(s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW2RepeatTimes == 0)
+                    {
+                        if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun != NULL)
+                            s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun(HAL_WIPERCTR_LOW_MODE);
+                    }
+                    else if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrResetFun() == true)
+                    {
                         s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW2RepeatTimes ++;
-                    else{
-                            if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun != NULL)
-                                s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun(HAL_WIPERCTR_LOW_MODE);
                     }
                 }
                 else if(s_stUpdateHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW2RepeatTimes == s_stHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW2RepeatTimes)
@@ -130,7 +167,7 @@ int Hal_WiperCtr_Init(void)
     for(TaskNum = 0; TaskNum < HAL_WIPERCTRTASK_MAXNUM; TaskNum ++)
     {
         s_stHalWiperCtrInfo.bWiperCtrTaskCreat[TaskNum] = false;
-        s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] = HAL_WIPERCTR_INVALID_MODE;
+        s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] = HAL_WIPERCTR_OFF_MODE;
         s_stHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrOffInfo.KeepResetTimes = 0;
 //        s_stHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrAutoInfo = ;
         s_stHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW1RepeatTimes = 0;
@@ -139,7 +176,7 @@ int Hal_WiperCtr_Init(void)
         s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrResetFun = NULL;
         s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun = NULL;
 
-        WiperCtr_ClearInfo(TaskNum);
+        WiperCtr_ClearUpdateInfo(TaskNum, HAL_WIPERCTR_INVALID_MODE);
     }
     return 0;
 }
@@ -155,7 +192,7 @@ int Hal_WiperCtr_DeInit(void)
     for(TaskNum = 0; TaskNum < HAL_WIPERCTRTASK_MAXNUM; TaskNum ++)
     {
         s_stHalWiperCtrInfo.bWiperCtrTaskCreat[TaskNum] = false;
-        s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] = HAL_WIPERCTR_INVALID_MODE;
+        s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] = HAL_WIPERCTR_OFF_MODE;
         s_stHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrOffInfo.KeepResetTimes = 0;
 //        s_stHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrAutoInfo = ;
         s_stHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW1RepeatTimes = 0;
@@ -164,7 +201,7 @@ int Hal_WiperCtr_DeInit(void)
         s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrResetFun = NULL;
         s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun = NULL;
 
-        WiperCtr_ClearInfo(TaskNum);
+        WiperCtr_ClearUpdateInfo(TaskNum, HAL_WIPERCTR_INVALID_MODE);
     }
     return 0;
 }
@@ -183,7 +220,7 @@ int Hal_WiperCtr_CreatTask(Hal_WiperCtrTask_Info * pstHalWiperCtrTaskInfo)
         if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun == NULL)
         {
             s_stHalWiperCtrInfo.bWiperCtrTaskCreat[TaskNum] = true;
-            s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] = HAL_WIPERCTR_INVALID_MODE;
+            s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] = HAL_WIPERCTR_OFF_MODE;
             s_stHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrOffInfo.KeepResetTimes = pstHalWiperCtrTaskInfo->stHalWiperCtrOffInfo.KeepResetTimes;
 //            s_stHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrAutoInfo = ;
             s_stHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW1RepeatTimes = pstHalWiperCtrTaskInfo->stHal_WiperCtrWashInfo.LOW1RepeatTimes;
@@ -192,7 +229,7 @@ int Hal_WiperCtr_CreatTask(Hal_WiperCtrTask_Info * pstHalWiperCtrTaskInfo)
             s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrResetFun = pstHalWiperCtrTaskInfo->HalWiperCtrResetFun;
             s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun = pstHalWiperCtrTaskInfo->HalWiperCtrControlFun;
 
-            WiperCtr_ClearInfo(TaskNum);
+            WiperCtr_ClearUpdateInfo(TaskNum, HAL_WIPERCTR_INVALID_MODE);
 
             if(pstHalWiperCtrTaskInfo->HalWiperCtrControlFun != NULL)
                 pstHalWiperCtrTaskInfo->HalWiperCtrControlFun(HAL_WIPERCTR_OFF_MODE);
@@ -215,8 +252,8 @@ int Hal_WiperCtr_DestroyTask(int TaskNum, Hal_WiperCtrTask_Info * pstHalWiperCtr
     if(s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun == pstHalWiperCtrTaskInfo->HalWiperCtrControlFun)
     {
         s_stHalWiperCtrInfo.bWiperCtrTaskCreat[TaskNum] = false;
-        s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] = HAL_WIPERCTR_INVALID_MODE;
-        s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] = HAL_WIPERCTR_INVALID_MODE;
+        s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] = HAL_WIPERCTR_OFF_MODE;
+        s_stHalWiperCtrInfo.enWiperCtrTaskMode[TaskNum] = HAL_WIPERCTR_OFF_MODE;
         s_stHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrOffInfo.KeepResetTimes = 0;
 //        s_stHalWiperCtrTaskInfo[TaskNum].stHalWiperCtrAutoInfo = ;
         s_stHalWiperCtrTaskInfo[TaskNum].stHal_WiperCtrWashInfo.LOW1RepeatTimes = 0;
@@ -225,7 +262,7 @@ int Hal_WiperCtr_DestroyTask(int TaskNum, Hal_WiperCtrTask_Info * pstHalWiperCtr
         s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrResetFun = NULL;
         s_stHalWiperCtrTaskInfo[TaskNum].HalWiperCtrControlFun = NULL;
 
-        WiperCtr_ClearInfo(TaskNum);
+        WiperCtr_ClearUpdateInfo(TaskNum, HAL_WIPERCTR_INVALID_MODE);
 
         return 0;
     }

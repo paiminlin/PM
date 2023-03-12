@@ -24,12 +24,12 @@ HostApplication=
 UseCustomMakefile=0
 CustomMakefile=
 CommandLine=
-Folders=APP,COMMON,COMMON/Alarm,COMMON/cjson,COMMON/crc,COMMON/fsm,COMMON/ini,COMMON/list,COMMON/LookUpTable,COMMON/Param,COMMON/PrintLog,HAL,HAL/Hall_Motor,HAL/Key,HAL/Led,OS
+Folders=APP,COMMON,COMMON/Alarm,COMMON/cjson,COMMON/crc,COMMON/fsm,COMMON/ini,COMMON/list,COMMON/LookUpTable,COMMON/Param,COMMON/PrintLog,HAL,HAL/Hall_Motor,HAL/Key,HAL/Led,HAL/WiperCtr,OS
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
 CompilerSettings=0;0;0;0;0;0;0;0;0;0;1;1;0;0;0;1;1;0;0;0;0;0;4;0;0;0
-UnitCount=54
+UnitCount=56
 
 [VersionInfo]
 Major=1
@@ -455,16 +455,6 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit47]
-FileName=HAL\Led\demo.c
-Folder=HAL/Led
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-CompileCpp=0
-
 [Unit39]
 FileName=COMMON\PrintLog\README.md
 Folder=COMMON/PrintLog
@@ -485,16 +475,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit49]
-FileName=COMMON\fsm\fsm.c
-CompileCpp=0
-Folder=COMMON/fsm
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit50]
 FileName=COMMON\fsm\fsm.h
 CompileCpp=0
 Folder=COMMON/fsm
@@ -504,7 +484,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit51]
+[Unit50]
 FileName=COMMON\fsm\list.h
 CompileCpp=0
 Folder=COMMON/fsm
@@ -514,8 +494,18 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
+[Unit51]
+FileName=COMMON\fsm\README.md
+CompileCpp=0
+Folder=COMMON/fsm
+Compile=0
+Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
 [Unit48]
-FileName=COMMON\fsm\debug_log.h
+FileName=COMMON\fsm\fsm.c
 CompileCpp=0
 Folder=COMMON/fsm
 Compile=1
@@ -555,18 +545,19 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit52]
-FileName=COMMON\fsm\README.md
+FileName=COMMON\fsm\fob.c
 Folder=COMMON/fsm
-Compile=0
-Link=0
+Compile=1
+Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
+CompileCpp=0
 
 [Unit55]
-FileName=COMMON\fsm\ign.c
+FileName=HAL\WiperCtr\Hal_WiperCtr.h
 CompileCpp=0
-Folder=COMMON/fsm
+Folder=HAL/WiperCtr
 Compile=1
 Link=1
 Priority=1000
@@ -574,6 +565,16 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit54]
+FileName=HAL\WiperCtr\Hal_WiperCtr.c
+CompileCpp=0
+Folder=HAL/WiperCtr
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit53]
 FileName=COMMON\fsm\ign.c
 CompileCpp=0
 Folder=COMMON/fsm
@@ -583,8 +584,27 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit53]
-FileName=COMMON\fsm\fob.c
+[Unit56]
+FileName=HAL\WiperCtr\README.md
+CompileCpp=0
+Folder=HAL/WiperCtr
+Compile=0
+Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit57]
+FileName=HAL\WiperCtr\README.md
+Folder=HAL/WiperCtr
+Compile=0
+Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit47]
+FileName=COMMON\fsm\debug_log.h
 CompileCpp=0
 Folder=COMMON/fsm
 Compile=1
