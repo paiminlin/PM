@@ -11,6 +11,10 @@ static bool s_bUnderStudyByStall[Hall_Motor_Invalid_Location][Hall_Motor_Invalid
 static int s_HallMotor_TimeCount[Hall_Motor_Invalid_Location][Hall_Motor_Invalid_Turn] = {0};       /* 霍尔超时计数器 */
 static int s_HallMotor_TurnCount[Hall_Motor_Invalid_Location] = {0};                                /* 霍尔脉冲计数器 */
 
+static int s_LastHallMotor_TurnCount[Hall_Motor_Invalid_Location] = {0};
+
+static Hall_Motor_Move s_LastenHallMotorMove[Hall_Motor_Invalid_Location] = {0};
+
 static Hall_Motor_Info s_stHallMotorInfo[Hall_Motor_Invalid_Location] = {0};
 static Hall_Motor_TaskInfo s_stHallMotorTaskInfo[Hall_Motor_Invalid_Location] = {0};
 
@@ -100,8 +104,6 @@ static void Motor_APP(Hall_Motor_Location enLocation)
 
 void Hall_Motor_Run()
 {
-    static int LastMotorTurnCount[Hall_Motor_Invalid_Location] = {0};
-
     Hall_Motor_Location enLocation = Hall_Motor_MainDriver_Location;
     for(enLocation = Hall_Motor_MainDriver_Location; enLocation < Hall_Motor_Invalid_Location; enLocation ++)
     {
@@ -111,7 +113,7 @@ void Hall_Motor_Run()
                 电机处于运作状态，霍尔脉冲计数器一直没更新，超时计数
             */
             if(s_stHallMotorInfo[enLocation].enHallMotorMove != Hall_Motor_Invalid_Move
-                && s_HallMotor_TurnCount[enLocation] == LastMotorTurnCount[enLocation])
+                && s_HallMotor_TurnCount[enLocation] == s_LastHallMotor_TurnCount[enLocation])
             {
                 if(s_stHallMotorInfo[enLocation].enHallMotorMove == Hall_Motor_ForwardStall_Move)
                 {
@@ -149,7 +151,7 @@ void Hall_Motor_Run()
                     && s_bUnderStudyByStall[enLocation][Hall_Motor_Reverse_Turn] == true)
                 {
                     /*
-                        自学习完成
+                        手动学习完成
                         更新位置，记录长度
                     */
                     s_stHallMotorInfo[enLocation].bStudy = true;
@@ -164,7 +166,7 @@ void Hall_Motor_Run()
                 电机处于运作状态，霍尔脉冲计数器一直没更新，超时计数
             */
             if(s_stHallMotorInfo[enLocation].enHallMotorMove != Hall_Motor_Invalid_Move
-                && s_HallMotor_TurnCount[enLocation] == LastMotorTurnCount[enLocation])
+                && s_HallMotor_TurnCount[enLocation] == s_LastHallMotor_TurnCount[enLocation])
             {
                 if(s_stHallMotorInfo[enLocation].enHallMotorMove == Hall_Motor_ForwardStall_Move
                     || s_stHallMotorInfo[enLocation].enHallMotorMove == Hall_Motor_ForwardSoftStop_Move
@@ -237,7 +239,7 @@ void Hall_Motor_Run()
             Motor_APP(enLocation);
         }
 
-        LastMotorTurnCount[enLocation] = s_HallMotor_TurnCount[enLocation];
+        s_LastHallMotor_TurnCount[enLocation] = s_HallMotor_TurnCount[enLocation];
     }
 }
 
@@ -380,6 +382,9 @@ void Hall_Motor_SetMove(Hall_Motor_Location enLocation, Hall_Motor_MoveInfo stHa
         || (stHallMotorMoveInfo.enHallMotorMove == Hall_Motor_Customlocation_Move
             && (s_stHallMotorInfo[enLocation].position - s_stHallMotorInfo[enLocation].Customlocation) >= MotorStartDeadBand_Count))
     {
+        /*
+            正转
+        */
         if(s_stHallMotorTaskInfo[enLocation].HallMotor_ForwardFun != NULL)
             s_stHallMotorTaskInfo[enLocation].HallMotor_ForwardFun();
     }
@@ -388,11 +393,17 @@ void Hall_Motor_SetMove(Hall_Motor_Location enLocation, Hall_Motor_MoveInfo stHa
         || (stHallMotorMoveInfo.enHallMotorMove == Hall_Motor_Customlocation_Move
             && (s_stHallMotorInfo[enLocation].Customlocation - s_stHallMotorInfo[enLocation].position) >= MotorStartDeadBand_Count))
     {
+        /*
+            反转
+        */
         if(s_stHallMotorTaskInfo[enLocation].HallMotor_ReverseFun != NULL)
             s_stHallMotorTaskInfo[enLocation].HallMotor_ReverseFun();
     }
     else if(stHallMotorMoveInfo.enHallMotorMove == Hall_Motor_Invalid_Move)
     {
+        /*
+            停止
+        */
         if(s_stHallMotorTaskInfo[enLocation].HallMotor_StopFun != NULL)
             s_stHallMotorTaskInfo[enLocation].HallMotor_StopFun();
     }
@@ -426,6 +437,8 @@ void Hall_Motor_Init()
         s_HallMotor_TimeCount[enLocation][Hall_Motor_Reverse_Turn] = 0;
 
         s_HallMotor_TurnCount[enLocation] = 0;
+        s_LastHallMotor_TurnCount[enLocation] = 0;
+        s_LastenHallMotorMove[enLocation] = Hall_Motor_Invalid_Move;
 
         s_stHallMotorInfo[enLocation].bStudy = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Forward_Turn] = false;
@@ -459,6 +472,8 @@ void Hall_Motor_DeInit()
         s_HallMotor_TimeCount[enLocation][Hall_Motor_Reverse_Turn] = 0;
 
         s_HallMotor_TurnCount[enLocation] = 0;
+        s_LastHallMotor_TurnCount[enLocation] = 0;
+        s_LastenHallMotorMove[enLocation] = Hall_Motor_Invalid_Move;
 
         s_stHallMotorInfo[enLocation].bStudy = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Forward_Turn] = false;
@@ -495,6 +510,8 @@ int Hall_Motor_CreatTask(Hall_Motor_Location enLocation, Hall_Motor_TaskInfo * p
         s_HallMotor_TimeCount[enLocation][Hall_Motor_Reverse_Turn] = 0;
 
         s_HallMotor_TurnCount[enLocation] = 0;
+        s_LastHallMotor_TurnCount[enLocation] = 0;
+        s_LastenHallMotorMove[enLocation] = Hall_Motor_Invalid_Move;
 
         s_stHallMotorInfo[enLocation].bStudy = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Forward_Turn] = false;
@@ -533,6 +550,8 @@ int Hall_Motor_DestroyTask(Hall_Motor_Location enLocation, Hall_Motor_TaskInfo *
         s_HallMotor_TimeCount[enLocation][Hall_Motor_Reverse_Turn] = 0;
 
         s_HallMotor_TurnCount[enLocation] = 0;
+        s_LastHallMotor_TurnCount[enLocation] = 0;
+        s_LastenHallMotorMove[enLocation] = Hall_Motor_Invalid_Move;
 
         s_stHallMotorInfo[enLocation].bStudy = false;
         s_stHallMotorInfo[enLocation].bStall[Hall_Motor_Forward_Turn] = false;
