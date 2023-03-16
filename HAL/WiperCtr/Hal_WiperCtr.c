@@ -339,6 +339,155 @@ int Hal_WiperCtr_GetMode(int TaskNum, Hal_WiperCtr_Mode *penWiperCtrTaskMode)
     return 0;
 }
 
+//#define WIPERCTR_MAIN_DEBUG
+#ifdef WIPERCTR_MAIN_DEBUG
+
+#include <time.h>
+
+int HalWiperCtrResetFun(bool bResetChange)
+{
+    static bool bLastReset = false;
+    bool bReset = false;
+
+    time_t seconds;
+    seconds = time(NULL);
+    struct tm * gmt;
+    gmt = localtime(&seconds);
+
+    Hal_WiperCtr_Mode enWiperCtrTaskMode;
+    Hal_WiperCtr_GetMode(0, &enWiperCtrTaskMode);
+    if(1)//if(enWiperCtrTaskMode == HAL_WIPERCTR_OFF_MODE)
+    {
+        if(gmt->tm_sec % 1 == 0)
+        {
+            bReset = true;
+        }
+        else
+        {
+            bReset = false;
+        }
+
+    }
+    else
+    {
+        if(gmt->tm_sec % 2 == 0)
+        {
+            bReset = true;
+        }
+        else
+        {
+            bReset = false;
+        }
+    }
+
+    if(bResetChange == false)
+    {
+//        return bReset;
+    }
+    else if(bResetChange == true)
+    {
+        if(bLastReset != bReset && bReset == true)
+        {
+//            return true;
+            bReset = true;
+
+        }
+        else
+        {
+//            return false;
+            bReset = false;
+        }
+    }
+
+    bLastReset = bReset;
+
+//    printf("%s-%d-%d\n",__func__, __LINE__, bReset);
+
+    return bReset;
+}
+
+int HalWiperCtrControlFun(Hal_WiperCtr_Mode enHalWiperCtrMode)
+{
+    if(enHalWiperCtrMode == HAL_WIPERCTR_OFF_MODE)
+        printf("%s-%d-HAL_WIPERCTR_OFF_MODE\n",__func__, __LINE__);
+    else if(enHalWiperCtrMode == HAL_WIPERCTR_LOW_MODE)
+        printf("%s-%d-HAL_WIPERCTR_LOW_MODE\n",__func__, __LINE__);
+    else if(enHalWiperCtrMode == HAL_WIPERCTR_HIGH_MODE)
+        printf("%s-%d-HAL_WIPERCTR_HIGH_MODE\n",__func__, __LINE__);
+    else if(enHalWiperCtrMode == HAL_WIPERCTR_AUTO_MODE)
+        printf("%s-%d-HAL_WIPERCTR_AUTO_MODE\n",__func__, __LINE__);
+    else if(enHalWiperCtrMode == HAL_WIPERCTR_WASH_MODE)
+        printf("%s-%d-HAL_WIPERCTR_WASH_MODE\n",__func__, __LINE__);
+    else if(enHalWiperCtrMode == HAL_WIPERCTR_REPAIR_MODE)
+        printf("%s-%d-HAL_WIPERCTR_REPAIR_MODE\n",__func__, __LINE__);
+}
+
+int main()
+{
+    Hal_WiperCtr_Init();
+
+    Hal_WiperCtrTask_Info stHalWiperCtrTaskInfo = {0};
+    stHalWiperCtrTaskInfo.stHalWiperCtrOffInfo.KeepResetTimes = 5;
+//    stHalWiperCtrTaskInfo.stHalWiperCtrAutoInfo = ;
+    stHalWiperCtrTaskInfo.stHal_WiperCtrWashInfo.LOW1RepeatTimes = 5;
+    stHalWiperCtrTaskInfo.stHal_WiperCtrWashInfo.OFFTimes = 5;
+    stHalWiperCtrTaskInfo.stHal_WiperCtrWashInfo.LOW2RepeatTimes = 5;
+    stHalWiperCtrTaskInfo.stHal_WiperCtrRepairInfo.LOWKeepTimes = 10;
+    stHalWiperCtrTaskInfo.HalWiperCtrResetFun = HalWiperCtrResetFun;
+    stHalWiperCtrTaskInfo.HalWiperCtrControlFun = HalWiperCtrControlFun;
+
+    int TaskNum = Hal_WiperCtr_CreatTask(&stHalWiperCtrTaskInfo);
+
+    while(1)
+    {
+        Hal_WiperCtr_Mode enWiperCtrTaskMode;
+        Hal_WiperCtr_GetMode(TaskNum, &enWiperCtrTaskMode);
+        if(enWiperCtrTaskMode == HAL_WIPERCTR_OFF_MODE)
+            printf("%s-%d-HAL_WIPERCTR_OFF_MODE\n",__func__, __LINE__);
+        else if(enWiperCtrTaskMode == HAL_WIPERCTR_LOW_MODE)
+            printf("%s-%d-HAL_WIPERCTR_LOW_MODE\n",__func__, __LINE__);
+        else if(enWiperCtrTaskMode == HAL_WIPERCTR_HIGH_MODE)
+            printf("%s-%d-HAL_WIPERCTR_HIGH_MODE\n",__func__, __LINE__);
+        else if(enWiperCtrTaskMode == HAL_WIPERCTR_AUTO_MODE)
+            printf("%s-%d-HAL_WIPERCTR_AUTO_MODE\n",__func__, __LINE__);
+        else if(enWiperCtrTaskMode == HAL_WIPERCTR_WASH_MODE)
+            printf("%s-%d-HAL_WIPERCTR_WASH_MODE\n",__func__, __LINE__);
+        else if(enWiperCtrTaskMode == HAL_WIPERCTR_REPAIR_MODE)
+            printf("%s-%d-HAL_WIPERCTR_REPAIR_MODE\n",__func__, __LINE__);
+        else if(enWiperCtrTaskMode == HAL_WIPERCTR_INVALID_MODE)
+            printf("%s-%d-HAL_WIPERCTR_INVALID_MODE\n",__func__, __LINE__);
+
+        static bool bSet1 = false;
+        static bool bSet2 = false;
+        static bool bSet3 = false;
+
+        if(bSet1 == false)
+        {
+            bSet1 = true;
+            Hal_WiperCtr_SetMode(TaskNum, HAL_WIPERCTR_WASH_MODE);
+//            Hal_WiperCtr_SetMode(TaskNum, HAL_WIPERCTR_REPAIR_MODE);
+        }
+
+        Hal_WiperCtr_Run();
+
+        sleep(1);
+
+        Hal_WiperCtr_GetMode(TaskNum, &enWiperCtrTaskMode);
+        if(enWiperCtrTaskMode == HAL_WIPERCTR_INVALID_MODE)
+        {
+            break;
+        }
+    }
+
+    Hal_WiperCtr_DestroyTask(TaskNum, &stHalWiperCtrTaskInfo);
+
+    Hal_WiperCtr_DeInit();
+
+    return 0;
+}
+
+#endif
+
 #ifdef __cplusplus
 }
 #endif
