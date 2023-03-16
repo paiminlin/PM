@@ -22,14 +22,15 @@ extern "C"{
 typedef enum 
 {
     HAL_WIPERCTR_OFF_MODE = 0,                      /* 关闭 */
-    HAL_WIPERCTR_LOW_MODE = 0,                      /* 低速 */
+    HAL_WIPERCTR_LOW_MODE,                          /* 低速 */
     HAL_WIPERCTR_HIGH_MODE,                         /* 高速 */
     HAL_WIPERCTR_AUTO_MODE,                         /* 自动 */
     HAL_WIPERCTR_WASH_MODE,                         /* 洗涤 */
+    HAL_WIPERCTR_REPAIR_MODE,                       /* 维修 */
     HAL_WIPERCTR_INVALID_MODE,                      /* 无效 */
 }Hal_WiperCtr_Mode;
 
-typedef int (*Hal_WiperCtrReset_Fun)();
+typedef int (*Hal_WiperCtrReset_Fun)(bool bResetChange);
 
 typedef int (*Hal_WiperCtrControl_Fun)(Hal_WiperCtr_Mode enHalWiperCtrMode);
 
@@ -49,11 +50,17 @@ typedef struct Hal_WiperCtrWash_Info
     int LOW2RepeatTimes;                            /* 重复次数 */
 } Hal_WiperCtrWash_Info;
 
+typedef struct Hal_WiperCtrRepair_Info
+{
+    int LOWKeepTimes;                               /* Low 维持时间 */
+} Hal_WiperCtrRepair_Info;
+
 typedef struct Hal_WiperCtrTask_Info
 {
     Hal_WiperCtrOff_Info stHalWiperCtrOffInfo;
     Hal_WiperCtrAuto_Info stHalWiperCtrAutoInfo;
     Hal_WiperCtrWash_Info stHal_WiperCtrWashInfo;
+    Hal_WiperCtrRepair_Info stHal_WiperCtrRepairInfo;
     Hal_WiperCtrReset_Fun HalWiperCtrResetFun;      /*  */
     Hal_WiperCtrControl_Fun HalWiperCtrControlFun;  /*  */
 } Hal_WiperCtrTask_Info;

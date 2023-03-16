@@ -1,615 +1,812 @@
 [Project]
-filename=PM.dev
-name=PM
-Type=1
-Ver=2
-ObjFiles=
-Includes=
-Libs=
-PrivateResource=
-ResourceIncludes=
-MakeIncludes=
-Compiler=
-CppCompiler=
-Linker=
-IsCpp=0
-Icon=
-ExeOutput=
-ObjectOutput=
-LogOutput=
-LogOutputEnabled=0
-OverrideOutput=0
-OverrideOutputName=PM.exe
-HostApplication=
-UseCustomMakefile=0
-CustomMakefile=
-CommandLine=
-Folders=APP,COMMON,COMMON/Alarm,COMMON/cjson,COMMON/crc,COMMON/fsm,COMMON/ini,COMMON/list,COMMON/LookUpTable,COMMON/Param,COMMON/PrintLog,HAL,HAL/Hall_Motor,HAL/Key,HAL/Led,HAL/WiperCtr,OS
-IncludeVersionInfo=0
-SupportXPThemes=0
-CompilerSet=0
-CompilerSettings=0;0;0;0;0;0;0;0;0;0;1;1;0;0;0;1;1;0;0;0;0;0;4;0;0;0
-UnitCount=56
+filename = PM.dev
+name = PM
+Type = 1
+Ver = 3
+ObjFiles = 
+Includes = 
+Libs = 
+PrivateResource = 
+ResourceIncludes = 
+MakeIncludes = 
+Compiler = 
+CppCompiler = 
+Linker = 
+IsCpp = 0
+Icon = 
+ExeOutput = 
+ObjectOutput = 
+LogOutput = 
+LogOutputEnabled = 0
+OverrideOutput = 0
+OverrideOutputName = PM.exe
+HostApplication = 
+UseCustomMakefile = 0
+CustomMakefile = 
+CommandLine = 
+Folders = APP,COMMON,COMMON/Alarm,COMMON/cjson,COMMON/crc,COMMON/fsm,COMMON/ini,COMMON/list,COMMON/LookUpTable,COMMON/Param,COMMON/PrintLog,HAL,HAL/Hall_Motor,HAL/Key,HAL/Led,HAL/WiperCtr,OS
+IncludeVersionInfo = 0
+SupportXPThemes = 0
+CompilerSet = 1
+UnitCount = 56
+Bins = 
+ResourceCommand = 
+UsePrecompiledHeader = 0
+PrecompiledHeader = 
+StaticLink = 0
+AddCharset = 1
+ExecEncoding = SYSTEM
+Encoding = UTF-8
+ModelType = 1
+ClassBrowserType = 0
+AllowParallelBuilding = false
+ParellelBuildingJobs = 0
+UseUTF8 = 1
+
 
 [VersionInfo]
-Major=1
-Minor=0
-Release=0
-Build=0
-LanguageID=1033
-CharsetID=1252
-CompanyName=
-FileVersion=1.0.0.0
-FileDescription=Developed using the Dev-C++ IDE
-InternalName=
-LegalCopyright=
-LegalTrademarks=
-OriginalFilename=
-ProductName=
-ProductVersion=1.0.0.0
-AutoIncBuildNr=0
-SyncProduct=1
+Major = 1
+Minor = 0
+Release = 0
+Build = 0
+LanguageID = 1033
+CharsetID = 1252
+CompanyName = 
+FileVersion = 1.0.0.0
+FileDescription = Developed using the Dev-C++ IDE
+InternalName = 
+LegalCopyright = 
+LegalTrademarks = 
+OriginalFilename = PM.exe
+ProductName = PM
+ProductVersion = 1.0.0.0
+AutoIncBuildNr = 0
+SyncProduct = 1
+
 
 [Unit1]
-FileName=COMMON\Alarm\Alarm.c
-CompileCpp=0
-Folder=COMMON/Alarm
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/List/List.h
+CompileCpp = 0
+Folder = COMMON/list
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit2]
-FileName=COMMON\Alarm\Alarm.h
-CompileCpp=0
-Folder=COMMON/Alarm
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Ini/dictionary.h
+CompileCpp = 0
+Folder = COMMON/ini
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit5]
-FileName=COMMON\LookUpTable\LookUpTable.c
-CompileCpp=0
-Folder=COMMON/LookUpTable
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Ini/iniparser.h
+CompileCpp = 0
+Folder = COMMON/ini
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit6]
-FileName=COMMON\LookUpTable\LookUpTable.h
-CompileCpp=0
-Folder=COMMON/LookUpTable
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/fsm/debug_log.h
+CompileCpp = 0
+Folder = COMMON/fsm
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit7]
-FileName=OS\OS.c
-CompileCpp=0
-Folder=OS
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/LookUpTable/LookUpTable.h
+CompileCpp = 0
+Folder = COMMON/LookUpTable
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit8]
-FileName=OS\OS.h
-CompileCpp=0
-Folder=OS
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Cjson/cJSON.h
+CompileCpp = 0
+Folder = COMMON/cjson
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit9]
-FileName=main.c
-CompileCpp=0
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/PrintLog/PrintLog.h
+CompileCpp = 0
+Folder = COMMON/PrintLog
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit10]
-FileName=HAL\Hall_Motor\Hall_Motor.c
-CompileCpp=0
-Folder=HAL/Hall_Motor
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/fsm/list.h
+CompileCpp = 0
+Folder = COMMON/fsm
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit11]
-FileName=HAL\Hall_Motor\Hall_Motor.h
-CompileCpp=0
-Folder=HAL/Hall_Motor
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = HAL/Hall_Motor/Hall_Motor.h
+CompileCpp = 0
+Folder = HAL/Hall_Motor
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit12]
-FileName=COMMON\List\List.h
-CompileCpp=0
-Folder=COMMON/list
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Param/Param.h
+CompileCpp = 0
+Folder = COMMON/Param
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit13]
-FileName=COMMON\Alarm\README.md
-CompileCpp=0
-Folder=COMMON/Alarm
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = HAL/Key/README.md
+CompileCpp = 0
+Folder = HAL/Key
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit14]
-FileName=COMMON\Cjson\cJSON.c
-CompileCpp=0
-Folder=COMMON/cjson
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = HAL/README.md
+CompileCpp = 0
+Folder = HAL
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit15]
-FileName=COMMON\Cjson\cJSON.h
-Folder=COMMON/cjson
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-CompileCpp=0
+FileName = COMMON/Crc/crcLib.h
+Folder = COMMON/crc
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit16]
-FileName=COMMON\Cjson\cJSON_Utils.c
-CompileCpp=0
-Folder=COMMON/cjson
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Alarm/Alarm.c
+CompileCpp = 0
+Folder = COMMON/Alarm
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit17]
-FileName=COMMON\Cjson\cJSON_Utils.h
-CompileCpp=0
-Folder=COMMON/cjson
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Cjson/cJSON_Utils.c
+CompileCpp = 0
+Folder = COMMON/cjson
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit18]
-FileName=COMMON\Cjson\README.md
-CompileCpp=0
-Folder=COMMON/cjson
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = HAL/Led/Hal_Led.h
+CompileCpp = 0
+Folder = HAL/Led
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit19]
-FileName=COMMON\Crc\README.md
-CompileCpp=0
-Folder=COMMON/crc
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/LookUpTable/README.md
+CompileCpp = 0
+Folder = COMMON/LookUpTable
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit20]
-FileName=COMMON\Ini\dictionary.c
-Folder=COMMON/ini
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-CompileCpp=0
+FileName = COMMON/List/demo_list.c
+Folder = COMMON/list
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit22]
-FileName=COMMON\Ini\iniparser.c
-Folder=COMMON/ini
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-CompileCpp=0
+FileName = HAL/Key/Hal_Key.c
+Folder = HAL/Key
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit23]
-FileName=COMMON\Ini\iniparser.h
-CompileCpp=0
-Folder=COMMON/ini
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/ini/demo_ini.c
+CompileCpp = 0
+Folder = COMMON/ini
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit24]
-FileName=COMMON\Ini\README.md
-CompileCpp=0
-Folder=COMMON/ini
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/cjson/demo_cjson.c
+CompileCpp = 0
+Folder = COMMON/cjson
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit25]
-FileName=COMMON\List\README.md
-CompileCpp=0
-Folder=COMMON/list
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/PrintLog/README.md
+CompileCpp = 0
+Folder = COMMON/PrintLog
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit26]
-FileName=COMMON\LookUpTable\README.md
-CompileCpp=0
-Folder=COMMON/LookUpTable
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Crc/README.md
+CompileCpp = 0
+Folder = COMMON/crc
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit27]
-FileName=HAL\Hall_Motor\README.md
-Folder=HAL/Hall_Motor
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/fsm/ign.c
+Folder = COMMON/fsm
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit28]
-FileName=OS\README.md
-Folder=OS
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Alarm/README.md
+Folder = COMMON/Alarm
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit29]
-FileName=README.md
-Folder=
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = main.c
+Folder = 
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = UTF-8
+
 
 [Unit30]
-FileName=COMMON\README.md
-Folder=COMMON
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = HAL/WiperCtr/Hal_WiperCtr.h
+Folder = HAL/WiperCtr
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+CompileCpp = 0
+
 
 [Unit31]
-FileName=HAL\README.md
-Folder=HAL
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = HAL/Hall_Motor/Hall_Motor.c
+Folder = HAL/Hall_Motor
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = UTF-8
+CompileCpp = 0
+
 
 [Unit32]
-FileName=COMMON\Crc\demo_crc.c
-Folder=COMMON/crc
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-CompileCpp=0
+FileName = OS/OS.h
+Folder = OS
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit33]
-FileName=COMMON\Param\Param.c
-Folder=COMMON/Param
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-CompileCpp=0
+FileName = COMMON/Param/README.md
+Folder = COMMON/Param
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit34]
-FileName=COMMON\Param\Param.h
-Folder=COMMON/Param
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-CompileCpp=0
+FileName = COMMON/LookUpTable/LookUpTable.c
+Folder = COMMON/LookUpTable
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit35]
-FileName=COMMON\Param\README.md
-CompileCpp=0
-Folder=COMMON/Param
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/PrintLog/PrintLog.c
+CompileCpp = 0
+Folder = COMMON/PrintLog
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit36]
-FileName=HAL\Key\README.md
-Folder=HAL/Key
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-CompileCpp=0
+FileName = HAL/Key/Hal_Key.h
+Folder = HAL/Key
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit37]
-FileName=COMMON\PrintLog\PrintLog.c
-CompileCpp=0
-Folder=COMMON/PrintLog
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = HAL/WiperCtr/README.md
+CompileCpp = 0
+Folder = HAL/WiperCtr
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit38]
-FileName=COMMON\PrintLog\PrintLog.h
-CompileCpp=0
-Folder=COMMON/PrintLog
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/fsm/fob.c
+CompileCpp = 0
+Folder = COMMON/fsm
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit41]
-FileName=COMMON\ini\demo_ini.c
-Folder=COMMON/ini
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-CompileCpp=0
+FileName = COMMON/List/README.md
+Folder = COMMON/list
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit42]
-FileName=COMMON\cjson\demo_cjson.c
-CompileCpp=0
-Folder=COMMON/cjson
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/fsm/README.md
+CompileCpp = 0
+Folder = COMMON/fsm
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit43]
-FileName=HAL\Key\Hal_Key.c
-CompileCpp=0
-Folder=HAL/Key
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/README.md
+CompileCpp = 0
+Folder = COMMON
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit44]
-FileName=HAL\Key\Hal_Key.h
-Folder=HAL/Key
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-CompileCpp=0
+FileName = OS/README.md
+Folder = OS
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit45]
-FileName=HAL\Led\Hal_Led.c
-CompileCpp=0
-Folder=HAL/Led
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Cjson/cJSON.c
+CompileCpp = 0
+Folder = COMMON/cjson
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit46]
-FileName=HAL\Led\Hal_Led.h
-CompileCpp=0
-Folder=HAL/Led
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/fsm/fsm.h
+CompileCpp = 0
+Folder = COMMON/fsm
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit39]
-FileName=COMMON\PrintLog\README.md
-Folder=COMMON/PrintLog
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Ini/iniparser.c
+Folder = COMMON/ini
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+CompileCpp = 0
+
 
 [Unit40]
-FileName=COMMON\List\demo_list.c
-CompileCpp=0
-Folder=COMMON/list
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = HAL/Led/Hal_Led.c
+CompileCpp = 0
+Folder = HAL/Led
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit49]
-FileName=COMMON\fsm\fsm.h
-CompileCpp=0
-Folder=COMMON/fsm
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Cjson/cJSON_Utils.h
+CompileCpp = 0
+Folder = COMMON/cjson
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit50]
-FileName=COMMON\fsm\list.h
-CompileCpp=0
-Folder=COMMON/fsm
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = HAL/WiperCtr/Hal_WiperCtr.c
+CompileCpp = 0
+Folder = HAL/WiperCtr
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit51]
-FileName=COMMON\fsm\README.md
-CompileCpp=0
-Folder=COMMON/fsm
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Crc/crcLib.c
+CompileCpp = 0
+Folder = COMMON/crc
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit48]
-FileName=COMMON\fsm\fsm.c
-CompileCpp=0
-Folder=COMMON/fsm
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Crc/demo_crc.c
+CompileCpp = 0
+Folder = COMMON/crc
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit3]
-FileName=COMMON\Crc\crcLib.c
-CompileCpp=0
-Folder=COMMON/crc
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Alarm/Alarm.h
+CompileCpp = 0
+Folder = COMMON/Alarm
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit4]
-FileName=COMMON\Crc\crcLib.h
-CompileCpp=0
-Folder=COMMON/crc
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Ini/dictionary.c
+CompileCpp = 0
+Folder = COMMON/ini
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit21]
-FileName=COMMON\Ini\dictionary.h
-CompileCpp=0
-Folder=COMMON/ini
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Ini/README.md
+CompileCpp = 0
+Folder = COMMON/ini
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit52]
-FileName=COMMON\fsm\fob.c
-Folder=COMMON/fsm
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-CompileCpp=0
+FileName = COMMON/Cjson/README.md
+Folder = COMMON/cjson
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit55]
-FileName=HAL\WiperCtr\Hal_WiperCtr.h
-CompileCpp=0
-Folder=HAL/WiperCtr
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = README.md
+CompileCpp = 0
+Folder = 
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit54]
-FileName=HAL\WiperCtr\Hal_WiperCtr.c
-CompileCpp=0
-Folder=HAL/WiperCtr
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/fsm/fsm.c
+CompileCpp = 0
+Folder = COMMON/fsm
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit53]
-FileName=COMMON\fsm\ign.c
-CompileCpp=0
-Folder=COMMON/fsm
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Param/Param.c
+CompileCpp = 0
+Folder = COMMON/Param
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit56]
-FileName=HAL\WiperCtr\README.md
-CompileCpp=0
-Folder=HAL/WiperCtr
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = OS/OS.c
+CompileCpp = 0
+Folder = OS
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit57]
-FileName=HAL\WiperCtr\README.md
-Folder=HAL/WiperCtr
-Compile=0
-Link=0
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = COMMON/Alarm/Alarm.h
+Folder = COMMON/Alarm
+Compile = 1
+Link = 1
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+CompileCpp = 0
+FileEncoding = PROJECT
+RealEncoding = ASCII
+
 
 [Unit47]
-FileName=COMMON\fsm\debug_log.h
-CompileCpp=0
-Folder=COMMON/fsm
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
+FileName = HAL/Hall_Motor/README.md
+CompileCpp = 0
+Folder = HAL/Hall_Motor
+Compile = 0
+Link = 0
+Priority = 1000
+OverrideBuildCmd = 0
+BuildCmd = 
+FileEncoding = PROJECT
+RealEncoding = ASCII
 
+
+[CompilerSettings]
+c_cmd_opt_std = 
+cc_cmd_opt_debug_info = on
+cc_cmd_opt_use_pipe = on
+cc_cmd_opt_warning_all = on

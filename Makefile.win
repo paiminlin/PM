@@ -1,91 +1,71 @@
 # Project: PM
-# Makefile created by Embarcadero Dev-C++ 6.3
+# Makefile created by Red Panda C++ 2.16
 
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = COMMON/Alarm/Alarm.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o OS/OS.o main.o HAL/Hall_Motor/Hall_Motor.o COMMON/Cjson/cJSON.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/dictionary.o COMMON/Ini/iniparser.o COMMON/Crc/demo_crc.o COMMON/Param/Param.o COMMON/PrintLog/PrintLog.o COMMON/List/demo_list.o COMMON/ini/demo_ini.o COMMON/cjson/demo_cjson.o HAL/Key/Hal_Key.o HAL/Led/Hal_Led.o COMMON/fsm/fsm.o COMMON/fsm/fob.o COMMON/fsm/ign.o HAL/WiperCtr/Hal_WiperCtr.o
-LINKOBJ  = COMMON/Alarm/Alarm.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o OS/OS.o main.o HAL/Hall_Motor/Hall_Motor.o COMMON/Cjson/cJSON.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/dictionary.o COMMON/Ini/iniparser.o COMMON/Crc/demo_crc.o COMMON/Param/Param.o COMMON/PrintLog/PrintLog.o COMMON/List/demo_list.o COMMON/ini/demo_ini.o COMMON/cjson/demo_cjson.o HAL/Key/Hal_Key.o HAL/Led/Hal_Led.o COMMON/fsm/fsm.o COMMON/fsm/fob.o COMMON/fsm/ign.o HAL/WiperCtr/Hal_WiperCtr.o
-LIBS     = -L"E:/Dev-Cpp/TDM-GCC-64/lib" -L"E:/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib" -static-libgcc -pg
-INCS     = -I"E:/Dev-Cpp/TDM-GCC-64/include" -I"E:/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"E:/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
-CXXINCS  = -I"E:/Dev-Cpp/TDM-GCC-64/include" -I"E:/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"E:/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"E:/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
+OBJ      = COMMON/Ini/dictionary.o COMMON/Param/Param.o OS/OS.o COMMON/Cjson/cJSON.o COMMON/Crc/demo_crc.o HAL/WiperCtr/Hal_WiperCtr.o main.o COMMON/fsm/ign.o COMMON/PrintLog/PrintLog.o COMMON/fsm/fob.o HAL/Key/Hal_Key.o COMMON/ini/demo_ini.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/iniparser.o COMMON/cjson/demo_cjson.o HAL/Hall_Motor/Hall_Motor.o HAL/Led/Hal_Led.o COMMON/Alarm/Alarm.o COMMON/fsm/fsm.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o COMMON/List/demo_list.o
+LINKOBJ  = COMMON/Ini/dictionary.o COMMON/Param/Param.o OS/OS.o COMMON/Cjson/cJSON.o COMMON/Crc/demo_crc.o HAL/WiperCtr/Hal_WiperCtr.o main.o COMMON/fsm/ign.o COMMON/PrintLog/PrintLog.o COMMON/fsm/fob.o HAL/Key/Hal_Key.o COMMON/ini/demo_ini.o COMMON/Cjson/cJSON_Utils.o COMMON/Ini/iniparser.o COMMON/cjson/demo_cjson.o HAL/Hall_Motor/Hall_Motor.o HAL/Led/Hal_Led.o COMMON/Alarm/Alarm.o COMMON/fsm/fsm.o COMMON/Crc/crcLib.o COMMON/LookUpTable/LookUpTable.o COMMON/List/demo_list.o
+CLEANOBJ  =  COMMON\Ini\dictionary.o COMMON\Param\Param.o OS\OS.o COMMON\Cjson\cJSON.o COMMON\Crc\demo_crc.o HAL\WiperCtr\Hal_WiperCtr.o main.o COMMON\fsm\ign.o COMMON\PrintLog\PrintLog.o COMMON\fsm\fob.o HAL\Key\Hal_Key.o COMMON\ini\demo_ini.o COMMON\Cjson\cJSON_Utils.o COMMON\Ini\iniparser.o COMMON\cjson\demo_cjson.o HAL\Hall_Motor\Hall_Motor.o HAL\Led\Hal_Led.o COMMON\Alarm\Alarm.o COMMON\fsm\fsm.o COMMON\Crc\crcLib.o COMMON\LookUpTable\LookUpTable.o COMMON\List\demo_list.o PM.exe
+LIBS     = 
+INCS     =  
+CXXINCS  =  
 BIN      = PM.exe
-CXXFLAGS = $(CXXINCS) -Wall -Wextra -Wfatal-errors -pg
-CFLAGS   = $(INCS) -Wall -Wextra -Wfatal-errors -pg
-DEL      = E:\Dev-Cpp\DevCpp.exe INTERNAL_DEL
+CXXFLAGS = $(CXXINCS)  -g3 -pipe -Wall -D__DEBUG__
+CFLAGS   = $(INCS)  -g3 -pipe -Wall -D__DEBUG__
+RM       = del /q /f
+WINDRESFLAGS  = 
 
 .PHONY: all all-before all-after clean clean-custom
 
 all: all-before $(BIN) all-after
 
 clean: clean-custom
-	${DEL} $(OBJ) $(BIN)
+	-$(RM) $(CLEANOBJ) > NUL 2>&1
 
 $(BIN): $(OBJ)
 	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
 
-COMMON/Alarm/Alarm.o: COMMON/Alarm/Alarm.c
-	$(CC) -c COMMON/Alarm/Alarm.c -o COMMON/Alarm/Alarm.o $(CFLAGS)
+COMMON/Ini/dictionary.o: COMMON/Ini/dictionary.c COMMON/Ini/dictionary.h
 
-COMMON/Crc/crcLib.o: COMMON/Crc/crcLib.c
-	$(CC) -c COMMON/Crc/crcLib.c -o COMMON/Crc/crcLib.o $(CFLAGS)
+COMMON/Param/Param.o: COMMON/Param/Param.c COMMON/Param/Param.h
 
-COMMON/LookUpTable/LookUpTable.o: COMMON/LookUpTable/LookUpTable.c
-	$(CC) -c COMMON/LookUpTable/LookUpTable.c -o COMMON/LookUpTable/LookUpTable.o $(CFLAGS)
+OS/OS.o: OS/OS.c OS/OS.h
 
-OS/OS.o: OS/OS.c
-	$(CC) -c OS/OS.c -o OS/OS.o $(CFLAGS)
+COMMON/Cjson/cJSON.o: COMMON/Cjson/cJSON.c COMMON/Cjson/cJSON.h
+
+COMMON/Crc/demo_crc.o: COMMON/Crc/demo_crc.c COMMON/Crc/crcLib.h
+
+HAL/WiperCtr/Hal_WiperCtr.o: HAL/WiperCtr/Hal_WiperCtr.c HAL/WiperCtr/Hal_WiperCtr.h
 
 main.o: main.c
-	$(CC) -c main.c -o main.o $(CFLAGS)
-
-HAL/Hall_Motor/Hall_Motor.o: HAL/Hall_Motor/Hall_Motor.c
-	$(CC) -c HAL/Hall_Motor/Hall_Motor.c -o HAL/Hall_Motor/Hall_Motor.o $(CFLAGS)
-
-COMMON/Cjson/cJSON.o: COMMON/Cjson/cJSON.c
-	$(CC) -c COMMON/Cjson/cJSON.c -o COMMON/Cjson/cJSON.o $(CFLAGS)
-
-COMMON/Cjson/cJSON_Utils.o: COMMON/Cjson/cJSON_Utils.c
-	$(CC) -c COMMON/Cjson/cJSON_Utils.c -o COMMON/Cjson/cJSON_Utils.o $(CFLAGS)
-
-COMMON/Ini/dictionary.o: COMMON/Ini/dictionary.c
-	$(CC) -c COMMON/Ini/dictionary.c -o COMMON/Ini/dictionary.o $(CFLAGS)
-
-COMMON/Ini/iniparser.o: COMMON/Ini/iniparser.c
-	$(CC) -c COMMON/Ini/iniparser.c -o COMMON/Ini/iniparser.o $(CFLAGS)
-
-COMMON/Crc/demo_crc.o: COMMON/Crc/demo_crc.c
-	$(CC) -c COMMON/Crc/demo_crc.c -o COMMON/Crc/demo_crc.o $(CFLAGS)
-
-COMMON/Param/Param.o: COMMON/Param/Param.c
-	$(CC) -c COMMON/Param/Param.c -o COMMON/Param/Param.o $(CFLAGS)
-
-COMMON/PrintLog/PrintLog.o: COMMON/PrintLog/PrintLog.c
-	$(CC) -c COMMON/PrintLog/PrintLog.c -o COMMON/PrintLog/PrintLog.o $(CFLAGS)
-
-COMMON/List/demo_list.o: COMMON/List/demo_list.c
-	$(CC) -c COMMON/List/demo_list.c -o COMMON/List/demo_list.o $(CFLAGS)
-
-COMMON/ini/demo_ini.o: COMMON/ini/demo_ini.c
-	$(CC) -c COMMON/ini/demo_ini.c -o COMMON/ini/demo_ini.o $(CFLAGS)
-
-COMMON/cjson/demo_cjson.o: COMMON/cjson/demo_cjson.c
-	$(CC) -c COMMON/cjson/demo_cjson.c -o COMMON/cjson/demo_cjson.o $(CFLAGS)
-
-HAL/Key/Hal_Key.o: HAL/Key/Hal_Key.c
-	$(CC) -c HAL/Key/Hal_Key.c -o HAL/Key/Hal_Key.o $(CFLAGS)
-
-HAL/Led/Hal_Led.o: HAL/Led/Hal_Led.c
-	$(CC) -c HAL/Led/Hal_Led.c -o HAL/Led/Hal_Led.o $(CFLAGS)
-
-COMMON/fsm/fsm.o: COMMON/fsm/fsm.c
-	$(CC) -c COMMON/fsm/fsm.c -o COMMON/fsm/fsm.o $(CFLAGS)
-
-COMMON/fsm/fob.o: COMMON/fsm/fob.c
-	$(CC) -c COMMON/fsm/fob.c -o COMMON/fsm/fob.o $(CFLAGS)
 
 COMMON/fsm/ign.o: COMMON/fsm/ign.c
-	$(CC) -c COMMON/fsm/ign.c -o COMMON/fsm/ign.o $(CFLAGS)
 
-HAL/WiperCtr/Hal_WiperCtr.o: HAL/WiperCtr/Hal_WiperCtr.c
-	$(CC) -c HAL/WiperCtr/Hal_WiperCtr.c -o HAL/WiperCtr/Hal_WiperCtr.o $(CFLAGS)
+COMMON/PrintLog/PrintLog.o: COMMON/PrintLog/PrintLog.c COMMON/PrintLog/PrintLog.h
+
+COMMON/fsm/fob.o: COMMON/fsm/fob.c
+
+HAL/Key/Hal_Key.o: HAL/Key/Hal_Key.c HAL/Key/Hal_Key.h
+
+COMMON/ini/demo_ini.o: COMMON/ini/demo_ini.c
+
+COMMON/Cjson/cJSON_Utils.o: COMMON/Cjson/cJSON_Utils.c COMMON/Cjson/cJSON.h COMMON/Cjson/cJSON_Utils.h
+
+COMMON/Ini/iniparser.o: COMMON/Ini/iniparser.c COMMON/Ini/iniparser.h COMMON/Ini/dictionary.h
+
+COMMON/cjson/demo_cjson.o: COMMON/cjson/demo_cjson.c
+
+HAL/Hall_Motor/Hall_Motor.o: HAL/Hall_Motor/Hall_Motor.c HAL/Hall_Motor/Hall_Motor.h
+
+HAL/Led/Hal_Led.o: HAL/Led/Hal_Led.c HAL/Led/Hal_Led.h
+
+COMMON/Alarm/Alarm.o: COMMON/Alarm/Alarm.c COMMON/Alarm/Alarm.h
+
+COMMON/fsm/fsm.o: COMMON/fsm/fsm.c COMMON/fsm/list.h COMMON/fsm/fsm.h COMMON/fsm/debug_log.h
+
+COMMON/Crc/crcLib.o: COMMON/Crc/crcLib.c COMMON/Crc/crcLib.h
+
+COMMON/LookUpTable/LookUpTable.o: COMMON/LookUpTable/LookUpTable.c COMMON/LookUpTable/LookUpTable.h
+
+COMMON/List/demo_list.o: COMMON/List/demo_list.c
